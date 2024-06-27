@@ -14,8 +14,6 @@ export default async function BlogPage() {
     .map((category) => category.post)
     .flat(2);
 
-  console.log(allBlogs);
-
   const getUser = async () => {
     fetch("http://localhost:8080/auth/login/success", {
       method: "GET",
