@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllPost } from "../db/post";
+import { cookies } from "next/headers";
 
 export const metadata = {
   title: "Blog",
@@ -20,6 +21,7 @@ export default async function BlogPage() {
       method: "GET",
       credentials: "include",
       headers: {
+        Cookie: cookies().toString(),
         Accept: "application/json",
         "Content-Type": "application/json",
         "Access-Control-Allow-Credentials": "true",
@@ -38,7 +40,7 @@ export default async function BlogPage() {
       });
   };
 
-  // await getUser();
+  await getUser();
 
   return (
     <section>
