@@ -42,7 +42,7 @@ export async function getAllPost() {
   return ret;
 }
 
-const convertHTMLToJSX = (html: string) => {
+export const convertHTMLToJSX = (html: string) => {
   const converter = new HTMLToJSX({ createClass: false });
   return converter.convert(html);
 };

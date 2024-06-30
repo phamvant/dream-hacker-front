@@ -10,9 +10,7 @@ export const metadata = {
 export default async function BlogPage() {
   const regex = /(\d+)\.html$/;
 
-  let allBlogs = (await getAllPost())[0]
-    .map((category) => category.post)
-    .flat(2);
+  let allBlogs: string[] = [];
 
   const getUser = async () => {
     fetch("http://localhost:8080/auth/login/success", {
