@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { inter } from "./ui/fonts";
 import "./globals.css";
+import { cn } from "./lib/utils";
+import { Topbar } from "./components/Topbar";
 
 export const metadata: Metadata = {
   title: "Dreamhacker",
@@ -14,7 +16,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased max-w-6xl m-auto",
+          inter.className,
+        )}
+      >
+        <Topbar />
+        {children}
+      </body>
     </html>
   );
 }
