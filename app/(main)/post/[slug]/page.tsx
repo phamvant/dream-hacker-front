@@ -1,12 +1,17 @@
-import { convertHTMLToJSX } from "@/app/db/post";
 import { notFound } from "next/navigation";
+import HTMLToJSX from "htmltojsx";
+
+export const convertHTMLToJSX = (html: string) => {
+  const converter = new HTMLToJSX({ createClass: false });
+  return converter.convert(html);
+};
 
 export default async function Blog({ params }: { params: any }) {
   let html;
 
   try {
     const post = await fetch(
-      `http://localhost:8080/api/v1/post/${params.slug}`,
+      `http://localhost:8080/api/v1/post/${params.slug}`
     );
 
     if (post.ok) {
