@@ -6,15 +6,28 @@ export default async function List({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  console.log(searchParams);
   if (!searchParams.category || !searchParams.page) {
     notFound();
   }
 
-  return (
-    <PostPreviewArea
-      category={searchParams.category}
-      page={searchParams.page}
-    />
-  );
+  let posts: any[];
+  try {
+    const ret = await fetch(
+      `http://localhost:8080/api/v1/post/list?category=${searchParams.category}&page=${searchParams.page}`,
+      {
+        cache: "no-cache",
+      },
+    );
+
+    if (!ret.ok) {
+      notFound();
+    }
+
+    posts = (await ret.json()).metadata;
+  } catch (err) {
+    console.log(err);
+    notFound();
+  }
+
+  return <PostPreviewArea posts={posts} />;
 }

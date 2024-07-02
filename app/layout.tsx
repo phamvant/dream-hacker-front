@@ -3,11 +3,18 @@ import { inter } from "./ui/fonts";
 import "./globals.css";
 import { cn } from "./lib/utils";
 import { Topbar } from "./components/Topbar";
+import { Inter as FontSans } from "next/font/google";
+import { ThemeProvider } from "./ui/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Dreamhacker",
   description: "Study abroad oppotunities",
 };
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export default function RootLayout({
   children,
@@ -19,11 +26,13 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased max-w-6xl m-auto",
-          inter.className,
+          fontSans.variable,
         )}
       >
-        <Topbar />
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <Topbar />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
