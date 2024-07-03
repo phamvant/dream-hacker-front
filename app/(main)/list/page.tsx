@@ -1,5 +1,5 @@
 import PostPreviewArea from "@/app/components/PostPreviewArea";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export default async function List({
   searchParams,
@@ -16,17 +16,17 @@ export default async function List({
       `http://localhost:8080/api/v1/post/list?category=${searchParams.category}&page=${searchParams.page}`,
       {
         cache: "no-cache",
-      },
+      }
     );
 
     if (!ret.ok) {
-      notFound();
+      redirect("/");
     }
 
     posts = (await ret.json()).metadata;
   } catch (err) {
     console.log(err);
-    notFound();
+    redirect("/");
   }
 
   return <PostPreviewArea posts={posts} />;

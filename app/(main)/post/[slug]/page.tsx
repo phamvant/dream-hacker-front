@@ -1,23 +1,22 @@
 import { convertHTMLToJSX } from "@/lib/utils";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default async function Blog({ params }: { params: any }) {
   let html;
 
   try {
     const post = await fetch(
-      `http://localhost:8080/api/v1/post/${params.slug}`,
+      `http://localhost:8080/api/v1/post/${params.slug}`
     );
 
-    if (post.ok) {
-      const content = await new Response(post.body as ReadableStream).text();
-      html = convertHTMLToJSX(content);
+    if (!post.ok) {
+      redirect("/");
     }
-    if (!post) {
-      notFound();
-    }
+
+    const content = await new Response(post.body as ReadableStream).text();
+    html = convertHTMLToJSX(content);
   } catch (e) {
-    notFound();
+    redirect("/");
   }
 
   return (
@@ -25,7 +24,7 @@ export default async function Blog({ params }: { params: any }) {
       <h1 className="title font-medium text-2xl tracking-tighter max-w-[650px]"></h1>
       <div className="flex justify-between items-center mt-2 mb-8 text-sm max-w-[650px]"></div>
       <article className="prose prose-quoteless prose-neutral dark:prose-invert">
-        <div dangerouslySetInnerHTML={{ __html: html! }} />
+        <div dangerouslySetInnerHTML={{ __html: html ?? "" }} />
       </article>
     </section>
   );
