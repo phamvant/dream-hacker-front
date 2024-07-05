@@ -1,4 +1,5 @@
-import { convertHTMLToJSX } from "@/lib/utils";
+import configuration from "@/app/config/configuration";
+import { convertHTMLToJSX } from "@/app/lib/utils";
 import { redirect } from "next/navigation";
 
 export default async function Blog({ params }: { params: any }) {
@@ -6,7 +7,7 @@ export default async function Blog({ params }: { params: any }) {
 
   try {
     const post = await fetch(
-      `http://localhost:8080/api/v1/post/${params.slug}`
+      `http://54.238.219.48:8080/api/v1/post/${params.slug}`
     );
 
     if (!post.ok) {

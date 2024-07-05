@@ -2,11 +2,11 @@
 
 export default function LoginPage() {
   const google = () => {
-    window.open("http://localhost:8080/auth/google", "_self");
+    window.open("http://54.238.219.48:8080/auth/google", "_self");
   };
 
   const logout = () => {
-    window.open("http://localhost:8080/auth/logout", "_self");
+    window.open("http://54.238.219.48:8080/auth/logout", "_self");
   };
 
   return (

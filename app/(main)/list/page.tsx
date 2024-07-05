@@ -1,4 +1,5 @@
 import PostPreviewArea from "@/app/components/PostPreviewArea";
+import configuration from "@/app/config/configuration";
 import { notFound, redirect } from "next/navigation";
 
 export default async function List({
@@ -10,23 +11,27 @@ export default async function List({
     notFound();
   }
 
-  let posts: any[];
+  let posts: any[] = [];
+
   try {
     const ret = await fetch(
-      `http://localhost:8080/api/v1/post/list?category=${searchParams.category}&page=${searchParams.page}`,
+      `http://54.238.219.48:8080/api/v1/post/list?category=${searchParams.category}&page=${searchParams.page}`,
       {
         cache: "no-cache",
       }
     );
 
-    if (!ret.ok) {
-      redirect("/");
-    }
+    const postsData = (await ret.json()).metadata;
 
-    posts = (await ret.json()).metadata;
+    if (postsData) {
+      posts = postsData;
+    }
   } catch (err) {
     console.log(err);
-    redirect("/");
+  } finally {
+    if (!posts.length) {
+      redirect("/");
+    }
   }
 
   return <PostPreviewArea posts={posts} />;
