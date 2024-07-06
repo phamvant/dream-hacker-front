@@ -15,10 +15,10 @@ export default async function List({
 
   try {
     const ret = await fetch(
-      `http://54.238.219.48:8080/api/v1/post/list?category=${searchParams.category}&page=${searchParams.page}`,
+      `${configuration.APP.BACKEND_URL}/api/v1/post/list?category=${searchParams.category}&page=${searchParams.page}`,
       {
         cache: "no-cache",
-      }
+      },
     );
 
     const postsData = (await ret.json()).metadata;

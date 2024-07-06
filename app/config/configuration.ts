@@ -1,0 +1,38 @@
+interface Mode {
+  development: ConfigArgs;
+  production: ConfigArgs;
+}
+
+interface ConfigArgs {
+  NAME: string;
+  APP: {
+    BACKEND_URL: string;
+  };
+}
+
+const development: ConfigArgs = {
+  NAME: "development",
+  APP: {
+    BACKEND_URL: process.env.BACKEND_URL_DEV || "",
+  },
+};
+
+const production: ConfigArgs = {
+  NAME: "production",
+  APP: {
+    BACKEND_URL: process.env.BACKEND_URL || "",
+  },
+};
+
+const configuration: Mode = {
+  development,
+  production,
+};
+
+const env = process.env.NODE_ENV as keyof Mode;
+
+if (!env) {
+  console.error("No env");
+}
+
+export default configuration[env];

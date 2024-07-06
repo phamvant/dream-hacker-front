@@ -1,12 +1,14 @@
 "use client";
 
+import configuration from "../config/configuration";
+
 export default function LoginPage() {
   const google = () => {
-    window.open("http://54.238.219.48:8080/auth/google", "_self");
+    window.open(`${configuration.APP.BACKEND_URL}/auth/google`, "_self");
   };
 
   const logout = () => {
-    window.open("http://54.238.219.48:8080/auth/logout", "_self");
+    window.open(`${configuration.APP.BACKEND_URL}/auth/logout`, "_self");
   };
 
   return (

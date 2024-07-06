@@ -7,7 +7,7 @@ export default async function Blog({ params }: { params: any }) {
 
   try {
     const post = await fetch(
-      `http://54.238.219.48:8080/api/v1/post/${params.slug}`
+      `${configuration.APP.BACKEND_URL}/api/v1/post/${params.slug}`,
     );
 
     if (!post.ok) {
