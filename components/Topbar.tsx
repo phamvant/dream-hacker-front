@@ -1,5 +1,5 @@
+import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { cn } from "../lib/utils";
 
 interface MenuItem {
   name: string;
@@ -11,18 +11,16 @@ const menuItems: MenuItem[] = [
   { name: "PhD", href: "/phd" },
 ];
 
-export const Topbar = () => {
-  // const pathname = usePathname();
-
+export default function Topbar() {
   return (
     <section className="flex items-center justify-between pt-8 md:pt-16 mb-12">
       <Link href="/">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-tight text-blue-700/80">
+        <h1 className="text-6xl font-bold tracking-tighter leading-tight text-blue-700/80">
           Dreamhacker.
         </h1>
       </Link>
       <nav>
-        <div className="hidden md:flex items-center">
+        <div className="hidden xl:flex items-center">
           {menuItems.map((item) => (
             <div key={item.href} className="ml-4 md:ml-8 text-blue-700/80">
               <a
@@ -38,4 +36,4 @@ export const Topbar = () => {
       </nav>
     </section>
   );
-};
+}

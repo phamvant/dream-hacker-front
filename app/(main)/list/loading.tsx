@@ -1,5 +1,5 @@
-import PostPreviewArea from "@/app/components/PostPreviewArea";
 import { Post } from "@/app/page";
+import PostPreviewArea from "@/components/PostPreviewArea";
 
 const posts: Post[] = [
   {

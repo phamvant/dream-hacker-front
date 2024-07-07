@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { inter } from "./ui/fonts";
 import "./globals.css";
-import { cn } from "./lib/utils";
-import { Topbar } from "./components/Topbar";
+import { cn } from "@/lib/utils";
+import Topbar from "@/components/Topbar";
 import { Inter as FontSans } from "next/font/google";
 import { ThemeProvider } from "./ui/ThemeProvider";
 
@@ -22,15 +22,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased max-w-6xl m-auto",
+          "min-h-screen bg-background font-sans antialiased",
           fontSans.variable,
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <Topbar />
           {children}
         </ThemeProvider>
       </body>

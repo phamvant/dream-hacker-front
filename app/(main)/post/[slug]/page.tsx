@@ -1,5 +1,5 @@
 import configuration from "@/app/config/configuration";
-import { convertHTMLToJSX } from "@/app/lib/utils";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function Blog({ params }: { params: any }) {
@@ -8,6 +8,9 @@ export default async function Blog({ params }: { params: any }) {
   try {
     const post = await fetch(
       `${configuration.APP.BACKEND_URL}/api/v1/post/${params.slug}`,
+      {
+        headers: { Cookie: cookies().toString() },
+      },
     );
 
     if (!post.ok) {
@@ -15,7 +18,7 @@ export default async function Blog({ params }: { params: any }) {
     }
 
     const content = await new Response(post.body as ReadableStream).text();
-    html = convertHTMLToJSX(content);
+    html = content;
   } catch (e) {
     redirect("/");
   }

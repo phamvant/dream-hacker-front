@@ -1,6 +1,7 @@
-import PostPreviewArea from "@/app/components/PostPreviewArea";
 import configuration from "@/app/config/configuration";
+import PostPreviewArea from "@/components/PostPreviewArea";
 import { notFound, redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export default async function List({
   searchParams,
@@ -18,6 +19,7 @@ export default async function List({
       `${configuration.APP.BACKEND_URL}/api/v1/post/list?category=${searchParams.category}&page=${searchParams.page}`,
       {
         cache: "no-cache",
+        headers: { Cookie: cookies().toString() },
       },
     );
 

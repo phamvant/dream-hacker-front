@@ -13,14 +13,14 @@ interface ConfigArgs {
 const development: ConfigArgs = {
   NAME: "development",
   APP: {
-    BACKEND_URL: process.env.BACKEND_URL_DEV || "",
+    BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL_DEV || "",
   },
 };
 
 const production: ConfigArgs = {
   NAME: "production",
   APP: {
-    BACKEND_URL: process.env.BACKEND_URL || "",
+    BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL || "",
   },
 };
 
