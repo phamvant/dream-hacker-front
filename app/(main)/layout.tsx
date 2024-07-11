@@ -7,7 +7,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="max-w-3xl xl:max-w-7xl px-4 xl:px-32 m-auto">
+    <div className="max-w-3xl xl:max-w-7xl px-4 m-auto">
       <Topbar />
       <div className="grid grid-cols-3 gap-10 pt-10">
         <div className="relative col-span-3 xl:col-span-2 rounded-lg">

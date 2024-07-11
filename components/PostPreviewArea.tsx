@@ -1,5 +1,5 @@
+import { Post } from "@/app/page";
 import Link from "next/link";
-import { Post } from "../page";
 
 function PostPreviewCard({ post }: { post: Post }) {
   return (

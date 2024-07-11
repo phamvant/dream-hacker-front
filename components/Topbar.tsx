@@ -9,6 +9,8 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { name: "MBA", href: "/mba" },
   { name: "PhD", href: "/phd" },
+  { name: "Editor", href: "/editor" },
+  { name: "Login", href: "/login" },
 ];
 
 export default function Topbar() {

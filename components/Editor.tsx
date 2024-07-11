@@ -9,12 +9,20 @@ import { useEffect } from "react";
 
 interface EditorProps {
   setBlocks: any;
+  setMarkdown: any;
+  setTitle: any;
   initialContent: string;
   editable?: boolean;
 }
 
+interface Heading {
+  text: string;
+}
+
 export default function Editor({
   setBlocks,
+  setMarkdown,
+  setTitle,
   initialContent,
   editable,
 }: EditorProps) {
@@ -25,6 +33,13 @@ export default function Editor({
         : [],
     );
   }, []);
+
+  const onChange = async () => {
+    const markdown = await editor.blocksToMarkdownLossy(editor.document);
+    const title = (editor.document[0].content as Heading[])[0].text;
+    setTitle(title);
+    setMarkdown(markdown);
+  };
 
   const editor = useCreateBlockNote({
     initialContent:
@@ -38,6 +53,7 @@ export default function Editor({
       editor={editor}
       onChange={() => {
         setBlocks(editor.document);
+        onChange();
       }}
     />
   );

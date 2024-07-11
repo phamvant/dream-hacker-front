@@ -33,6 +33,7 @@ export const StateButton = ({
           ? "secondary"
           : "default"
       }
+      onClick={onClick}
       size={size}
       type="submit"
       className={cn(className)}
