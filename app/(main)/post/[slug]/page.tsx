@@ -1,5 +1,4 @@
 import configuration from "@/app/config/configuration";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import remarkGfm from "remark-gfm";
 import Markdown from "react-markdown";
@@ -10,9 +9,6 @@ export default async function Blog({ params }: { params: any }) {
   try {
     const response = await fetch(
       `${configuration.APP.BACKEND_URL}/api/v1/post/${params.slug}`,
-      {
-        headers: { Cookie: cookies().toString() },
-      },
     );
 
     if (!response.ok) {
@@ -20,7 +16,6 @@ export default async function Blog({ params }: { params: any }) {
     }
 
     const body = await response.json();
-    console.log(body.metadata.content);
     markdown = body.metadata.content;
   } catch (e) {
     redirect("/");

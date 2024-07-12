@@ -1,32 +1,13 @@
-import configuration from "../config/configuration";
+import { getServerSession } from "@/lib/auth/auth";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-
-const getSession = async () => {
-  try {
-    const res = await fetch(`${configuration.APP.BACKEND_URL}/auth`, {
-      method: "GET",
-      credentials: "include",
-      cache: "no-cache",
-      headers: { Cookie: cookies().toString() },
-    });
-
-    if (!res.ok) {
-      return false;
-    }
-
-    return res;
-  } catch (err) {
-    return false;
-  }
-};
 
 export default async function EditorLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isAuth = await getSession();
+  const isAuth = await getServerSession(cookies());
 
   if (!isAuth) {
     redirect("/");

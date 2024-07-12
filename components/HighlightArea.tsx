@@ -10,7 +10,7 @@ function HighlightCard() {
 export default function HighlightArea() {
   return (
     <>
-      <p className="text-2xl font-bold mb-5 text-primary">Feature</p>
+      <p className="text-2xl font-bold mb-5">Feature</p>
       <div className="flex flex-col gap-4">
         <HighlightCard />
         <HighlightCard />

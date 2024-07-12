@@ -36,8 +36,10 @@ export default function Editor({
 
   const onChange = async () => {
     const markdown = await editor.blocksToMarkdownLossy(editor.document);
-    const title = (editor.document[0].content as Heading[])[0].text;
-    setTitle(title);
+    if ((editor.document[0].content as Heading[]).length) {
+      const title = (editor.document[0].content as Heading[])[0].text;
+      setTitle(title);
+    }
     setMarkdown(markdown);
   };
 

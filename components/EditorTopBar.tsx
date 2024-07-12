@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Upload } from "lucide-react";
 import { StateButton } from "./StateButton";
+import ProfileButton from "./ProfileButton";
 
 interface Props {
   onPublish: () => void;
@@ -18,21 +18,24 @@ export default function EditorTopbar({ onPublish, status }: Props) {
         </h1>
       </Link>
 
-      <nav>
-        <div className="hidden xl:flex items-center">
-          <StateButton
-            size="sm"
-            className="h-10 gap-1 rounded-3xl"
-            onClick={onPublish}
-            status={status}
-            state={{
-              done: "Published",
-              error: "Error",
-              idle: "Publish",
-            }}
-          />
-        </div>
-      </nav>
+      <div className="flex gap-5">
+        <nav>
+          <div className="hidden xl:flex items-center">
+            <StateButton
+              size="sm"
+              className="h-10 gap-1 rounded-3xl"
+              onClick={onPublish}
+              status={status}
+              state={{
+                done: "Published",
+                error: "Error",
+                idle: "Publish",
+              }}
+            />
+          </div>
+        </nav>
+        <ProfileButton />
+      </div>
     </section>
   );
 }

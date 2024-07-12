@@ -4,13 +4,13 @@ import Link from "next/link";
 function PostPreviewCard({ post }: { post: Post }) {
   return (
     <div className="p-6 rounded-xl flex flex-col bg-card border border-border gap-5">
-      <h2 className="font-sans font-bold tracking-tighter text-md max-w-xl text-2xl text-primary">
+      <h2 className="font-sans font-bold tracking-tighter text-md max-w-xl text-2xl">
         {post.title}
       </h2>
-      <p className="text-primary/80">{post.title}</p>
+      <p className="">{post.title}</p>
       <div className="flex justify-between">
-        <p className="text-primary/80 text-sm">筆者：トゥアン</p>
-        <p className="text-primary/80 text-sm">日期：2024-04-19</p>
+        <p className=" text-sm">筆者：トゥアン</p>
+        <p className=" text-sm">日期：2024-04-19</p>
       </div>
     </div>
   );
