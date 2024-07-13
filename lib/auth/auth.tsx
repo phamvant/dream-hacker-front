@@ -1,7 +1,6 @@
 import configuration from "@/app/config/configuration";
-import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
-export const getServerSession = async (cookie: ReadonlyRequestCookies) => {
+export const getServerSession = async (cookie: any) => {
   try {
     const res = await fetch(`${configuration.APP.BACKEND_URL}/auth`, {
       method: "GET",

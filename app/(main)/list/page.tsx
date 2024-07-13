@@ -15,10 +15,14 @@ export default async function List({
   let posts: any[] = [];
 
   try {
+    console.log(
+      `${configuration.APP.BACKEND_URL}/api/v1/post/list?category=${searchParams.category}&page=${searchParams.page}`,
+    );
     const ret = await fetch(
       `${configuration.APP.BACKEND_URL}/api/v1/post/list?category=${searchParams.category}&page=${searchParams.page}`,
       {
         cache: "no-cache",
+        credentials: "include",
         headers: { Cookie: cookies().toString() },
       },
     );
@@ -32,7 +36,7 @@ export default async function List({
     console.log(err);
   } finally {
     if (!posts.length) {
-      redirect("/");
+      redirect("/login");
     }
   }
 
