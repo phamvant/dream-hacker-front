@@ -2,6 +2,7 @@ import configuration from "@/app/config/configuration";
 import { redirect } from "next/navigation";
 import remarkGfm from "remark-gfm";
 import Markdown from "react-markdown";
+import { Button } from "@/components/ui/button";
 
 export default async function Blog({ params }: { params: any }) {
   let markdown;
@@ -22,9 +23,23 @@ export default async function Blog({ params }: { params: any }) {
   }
 
   return (
-    <section className="px-10 pb-10 bg-card border-border border rounded-lg">
-      <h1 className="title font-medium text-2xl tracking-tighter max-w-[650px]"></h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm max-w-[650px]"></div>
+    <section className="px-2 md:px-10 pb-10 md:pt-10 bg-card md:border rounded-lg">
+      <div className="flex items-center gap-4 pb-6">
+        <Button
+          variant="outline"
+          size="icon"
+          className="overflow-hidden rounded-full"
+        >
+          <img
+            src="https://avatar.iran.liara.run/public/48"
+            alt="Avatar"
+            className="overflow-hidden rounded-full"
+          />
+        </Button>
+        <p className="text-sm">トゥアン</p>
+        <div>・</div>
+        <p className="text-sm">14/07/2024</p>
+      </div>
       <article className="prose dark:prose-invert">
         <Markdown remarkPlugins={[remarkGfm]}>{markdown}</Markdown>
       </article>

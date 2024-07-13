@@ -1,16 +1,58 @@
 import { Post } from "@/app/page";
 import Link from "next/link";
+import { Button } from "./ui/button";
+import { BookMarked, MessagesSquare, ThumbsUp } from "lucide-react";
 
 function PostPreviewCard({ post }: { post: Post }) {
   return (
     <div className="p-6 rounded-xl flex flex-col bg-card border border-border gap-5">
-      <h2 className="font-sans font-bold tracking-tighter text-md max-w-xl text-2xl">
+      <div className="flex items-center gap-4">
+        <Button
+          variant="outline"
+          size="icon"
+          className="overflow-hidden rounded-full"
+        >
+          <img
+            src="https://avatar.iran.liara.run/public/48"
+            alt="Avatar"
+            className="overflow-hidden rounded-full"
+          />
+        </Button>
+        <p className="text-sm">トゥアン</p>
+        <div>・</div>
+        <p className="text-sm">14/07/2024</p>
+      </div>
+      <h2 className="font-bold text-md max-w-2xl text-2xl text-slate-700 dark:text-white">
         {post.title}
       </h2>
-      <p className="">{post.title}</p>
       <div className="flex justify-between">
-        <p className=" text-sm">筆者：トゥアン</p>
-        <p className=" text-sm">日期：2024-04-19</p>
+        <div className="flex gap-8">
+          <div className="flex items-center gap-4">
+            <ThumbsUp
+              strokeWidth={1}
+              size={20}
+              className="text-blue-700 dark:text-blue-400"
+            />
+            <p className="text-sm">20</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <MessagesSquare
+              strokeWidth={1}
+              size={20}
+              className="text-green-700 dark:text-green-400"
+            />
+            <p className="text-sm">40</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <BookMarked
+              strokeWidth={1}
+              size={20}
+              className="text-yellow-600 dark:text-yellow-400"
+            />
+            <p className="text-sm">9</p>
+          </div>
+        </div>
+        <p className=" text-sm border-2 rounded-full p-1 px-2">Category</p>
       </div>
     </div>
   );

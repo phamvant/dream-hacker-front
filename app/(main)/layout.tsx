@@ -10,7 +10,7 @@ export default function Layout({
     <div>
       <div className="max-w-3xl xl:max-w-7xl px-4 m-auto min-h-screen">
         <Topbar />
-        <div className="grid grid-cols-3 gap-10 pt-10">
+        <div className="grid grid-cols-3 gap-10 pt-24 md:pt-10">
           <div className="relative col-span-3 xl:col-span-2 rounded-lg">
             {children}
           </div>

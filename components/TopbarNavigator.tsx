@@ -1,6 +1,7 @@
 import ProfileButton from "./ProfileButton";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
+import { ModeToggle } from "./ModeToggle";
 
 interface MenuItem {
   name: string;
@@ -18,17 +19,23 @@ const menuItems: MenuItem[] = [
 export default function TopbarNavigator({
   isAuth,
   isFetching,
+  className,
 }: {
   isAuth: any;
   isFetching: boolean;
+  className: string;
 }) {
   return !isFetching ? (
     <nav>
-      <div className="hidden xl:flex items-center">
+      <div className={cn(className, "items-center")}>
+        <ModeToggle />
         {menuItems.map((item) => {
           if (!item.authRequire || (item.authRequire && isAuth)) {
             return (
-              <div key={item.href} className="ml-4 md:ml-8 text-blue-700/80">
+              <div
+                key={item.href}
+                className="ml-4 md:ml-8 text-blue-700/80 dark:text-blue-500"
+              >
                 <a
                   href={item.href}
                   target={item.openInNewTab ? "_blank" : "_self"}

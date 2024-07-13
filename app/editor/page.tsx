@@ -46,7 +46,7 @@ export default function EditorPage() {
     <div>
       <EditorTopbar onPublish={savePost} status={publishStatus} />
       <div className="flex gap-2">
-        <div className="flex flex-col w-80 border rounded-xl p-4 gap-4">
+        <div className="hidden lg:flex flex-col w-80 border rounded-xl p-4 gap-4">
           <div className="p-2 text-xl font-bold">Editor tools</div>
           <div className="border rounded-xl p-2 h-40" />
           <div className="border rounded-xl p-2 h-40" />

@@ -46,27 +46,9 @@ export const StateButton = ({
       ) : (
         ""
       )}
-      {status === "done" ? (
-        <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-          {state.done}
-        </span>
-      ) : (
-        ""
-      )}
-      {status === "error" ? (
-        <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-          {state.error}
-        </span>
-      ) : (
-        ""
-      )}
-      {status === "idle" ? (
-        <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-          {state.idle}
-        </span>
-      ) : (
-        ""
-      )}
+      {status === "done" ? <span>{state.done}</span> : ""}
+      {status === "error" ? <span>{state.error}</span> : ""}
+      {status === "idle" ? <span>{state.idle}</span> : ""}
     </Button>
   );
 };
