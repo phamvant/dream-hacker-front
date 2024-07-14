@@ -32,15 +32,11 @@ export default function ProfileButton() {
   return isAuth ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="overflow-hidden rounded-full"
-        >
+        <Button variant="outline" size="icon" className="rounded-full">
           <img
             src="https://avatar.iran.liara.run/public/48"
             alt="Avatar"
-            className="overflow-hidden rounded-full"
+            className="rounded-full"
           />
         </Button>
       </DropdownMenuTrigger>

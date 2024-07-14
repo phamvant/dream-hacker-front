@@ -10,6 +10,9 @@ export default async function Blog({ params }: { params: any }) {
   try {
     const response = await fetch(
       `${configuration.APP.BACKEND_URL}/api/v1/post/${params.slug}`,
+      {
+        cache: "no-cache",
+      },
     );
 
     if (!response.ok) {

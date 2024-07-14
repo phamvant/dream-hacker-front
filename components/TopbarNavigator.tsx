@@ -3,14 +3,14 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ModeToggle";
 
-interface MenuItem {
+export interface MenuItem {
   name: string;
   href: string;
   authRequire?: boolean;
   openInNewTab?: boolean;
 }
 
-const menuItems: MenuItem[] = [
+export const menuItems: MenuItem[] = [
   { name: "MBA", href: "/mba" },
   { name: "PhD", href: "/phd" },
   { name: "Editor", href: "/editor", authRequire: true },

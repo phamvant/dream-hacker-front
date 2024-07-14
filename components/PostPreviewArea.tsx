@@ -18,9 +18,11 @@ function PostPreviewCard({ post }: { post: Post }) {
             className="overflow-hidden rounded-full"
           />
         </Button>
-        <p className="text-sm">トゥアン</p>
+        <p className="text-sm">{post.username}</p>
         <div>・</div>
-        <p className="text-sm">14/07/2024</p>
+        <p className="text-sm">
+          {post.created_at.split("T")[0].replaceAll("-", "/")}
+        </p>
       </div>
       <h2 className="font-bold text-md max-w-2xl text-2xl text-slate-700 dark:text-white">
         {post.title}
@@ -33,7 +35,7 @@ function PostPreviewCard({ post }: { post: Post }) {
               size={20}
               className="text-blue-700 dark:text-blue-400"
             />
-            <p className="text-sm">20</p>
+            <p className="text-sm">{post.likes}</p>
           </div>
           <div className="flex items-center gap-4">
             <MessagesSquare
@@ -41,7 +43,7 @@ function PostPreviewCard({ post }: { post: Post }) {
               size={20}
               className="text-green-700 dark:text-green-400"
             />
-            <p className="text-sm">40</p>
+            <p className="text-sm">{post.total_comments}</p>
           </div>
           <div className="flex items-center gap-4">
             <BookMarked
@@ -49,7 +51,7 @@ function PostPreviewCard({ post }: { post: Post }) {
               size={20}
               className="text-yellow-600 dark:text-yellow-400"
             />
-            <p className="text-sm">9</p>
+            <p className="text-sm">{post.saved}</p>
           </div>
         </div>
         <p className=" text-sm border-2 rounded-full p-1 px-2">Category</p>
