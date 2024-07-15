@@ -2,10 +2,12 @@
 
 import "@blocknote/core/fonts/inter.css";
 import { useCreateBlockNote } from "@blocknote/react";
-import { BlockNoteView } from "@blocknote/mantine";
+import { BlockNoteView, darkDefaultTheme } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import { Block, PartialBlock } from "@blocknote/core";
 import { useEffect } from "react";
+import { useTheme } from "next-themes";
+import "../app/globals.css";
 
 interface EditorProps {
   setBlocks: any;
@@ -30,9 +32,11 @@ export default function Editor({
     setBlocks(
       initialContent !== undefined && initialContent !== "[]"
         ? (JSON.parse(initialContent) as Block[])
-        : [],
+        : []
     );
   }, []);
+
+  const { theme } = useTheme();
 
   const onChange = async () => {
     const markdown = await editor.blocksToMarkdownLossy(editor.document);
@@ -52,11 +56,14 @@ export default function Editor({
 
   return (
     <BlockNoteView
+      color="red"
+      theme={theme as "dark" | "light"}
       editor={editor}
       onChange={() => {
         setBlocks(editor.document);
         onChange();
       }}
+      data-theming-css-variables-demo
     />
   );
 }

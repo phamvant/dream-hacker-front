@@ -54,14 +54,14 @@ export default function EditorPage() {
     <div>
       <EditorTopbar onPublish={savePost} status={publishStatus} />
       <div className="flex gap-2">
-        <div className="hidden lg:flex flex-col w-80 border rounded-xl p-4 gap-4">
+        <div className="hidden flex-col w-80 border rounded-xl p-4 gap-4">
           <div className="p-2 text-xl font-bold">Editor tools</div>
           <div className="border rounded-xl p-2 h-40" />
           <div className="border rounded-xl p-2 h-40" />
           <div className="border rounded-xl p-2 h-40" />
           <div className="border rounded-xl p-2 h-40" />
         </div>
-        <div className="xl:border min-h-screen p-6 pt-10 rounded-xl flex-grow">
+        <div className="xl:border min-h-screen p-6 pt-10 rounded-xl w-full">
           <Editor
             setTitle={setTitle}
             setBlocks={setBlocks}

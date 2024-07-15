@@ -26,7 +26,7 @@ export default async function Blog({ params }: { params: any }) {
   }
 
   return (
-    <section className="px-2 md:px-10 pb-10 md:pt-10 bg-card md:border rounded-lg">
+    <section className="px-2 md:px-10 pb-10 md:pt-10 bg-card md:border rounded-lg break-words">
       <div className="flex items-center gap-4 pb-6">
         <Button
           variant="outline"
