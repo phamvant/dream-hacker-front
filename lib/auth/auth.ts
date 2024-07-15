@@ -13,7 +13,7 @@ export const getServerSession = async (cookie: any) => {
       return false;
     }
 
-    return res;
+    return (await res.json()).metadata;
   } catch (err) {
     return false;
   }
@@ -31,8 +31,9 @@ export const getSession = async () => {
       return false;
     }
 
-    return res;
+    return (await res.json()).metadata;
   } catch (err) {
+    console.log(err);
     return false;
   }
 };

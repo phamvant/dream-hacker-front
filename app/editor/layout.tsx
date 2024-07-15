@@ -7,9 +7,9 @@ export default async function EditorLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isAuth = await getServerSession(cookies());
+  const { role } = await getServerSession(cookies());
 
-  if (!isAuth) {
+  if (!["ADMIN", "MODDER"].includes(role)) {
     redirect("/");
   }
 

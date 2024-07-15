@@ -16,10 +16,10 @@ export default async function List({
 
   try {
     console.log(
-      `${configuration.APP.BACKEND_URL}/api/v1/post/list?category=${searchParams.category}&page=${searchParams.page}`,
+      `${configuration.APP.BACKEND_URL}/api/v1/post?category=${searchParams.category}&page=${searchParams.page}`,
     );
     const ret = await fetch(
-      `${configuration.APP.BACKEND_URL}/api/v1/post/list?category=${searchParams.category}&page=${searchParams.page}`,
+      `${configuration.APP.BACKEND_URL}/api/v1/post?category=${searchParams.category}&page=${searchParams.page}`,
       {
         cache: "no-cache",
         credentials: "include",

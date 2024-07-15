@@ -4,28 +4,19 @@ import { getSession } from "@/lib/auth/auth";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import TopbarNavigator from "./TopbarNavigator";
-import { AlignJustify, ListIcon, Moon } from "lucide-react";
+import { AlignJustify } from "lucide-react";
 import ProfileButton from "./ProfileButton";
 import { Button } from "./ui/button";
 
 export default function Topbar({
   onClickShowSidebar,
+  session,
+  isFetching,
 }: {
   onClickShowSidebar: Dispatch<SetStateAction<boolean>>;
+  session: any;
+  isFetching: boolean;
 }) {
-  const [isAuth, setAuth] = useState<any>(false);
-  const [isFetching, setFetch] = useState<boolean>(true);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const session = await getSession();
-      setAuth(session);
-      setFetch(false);
-    };
-
-    checkAuth();
-  }, []);
-
   return (
     <div className="fixed top-0 left-0 w-full md:static z-10 backdrop-filter backdrop-blur-lg px-4 md:px-0 bg-white/10 dark:bg-black/10">
       <section className="flex items-center justify-between py-4 md:pt-16">
@@ -42,11 +33,11 @@ export default function Topbar({
           </Link>
         </div>
         <TopbarNavigator
-          isAuth={isAuth}
+          session={session}
           isFetching={isFetching}
           className="hidden md:flex"
         />
-        {isAuth ? (
+        {session ? (
           <div className="md:hidden">
             <ProfileButton />
           </div>

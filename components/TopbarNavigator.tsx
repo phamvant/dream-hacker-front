@@ -6,22 +6,22 @@ import { ModeToggle } from "./ModeToggle";
 export interface MenuItem {
   name: string;
   href: string;
-  authRequire?: boolean;
+  role?: string;
   openInNewTab?: boolean;
 }
 
 export const menuItems: MenuItem[] = [
   { name: "MBA", href: "/mba" },
   { name: "PhD", href: "/phd" },
-  { name: "Editor", href: "/editor", authRequire: true },
+  { name: "Editor", href: "/editor", role: "ADMIN" },
 ];
 
 export default function TopbarNavigator({
-  isAuth,
+  session,
   isFetching,
   className,
 }: {
-  isAuth: any;
+  session: any;
   isFetching: boolean;
   className: string;
 }) {
@@ -30,7 +30,7 @@ export default function TopbarNavigator({
       <div className={cn(className, "items-center")}>
         <ModeToggle />
         {menuItems.map((item) => {
-          if (!item.authRequire || (item.authRequire && isAuth)) {
+          if (!item.role || item.role === session.role) {
             return (
               <div
                 key={item.href}
@@ -47,7 +47,7 @@ export default function TopbarNavigator({
             );
           }
         })}
-        {isAuth ? (
+        {session ? (
           <div className="ml-4 md:ml-8">
             <ProfileButton />
           </div>
