@@ -13,7 +13,7 @@ function PostPreviewCard({ post }: { post: Post }) {
           className="overflow-hidden rounded-full"
         >
           <img
-            src="https://avatar.iran.liara.run/public/48"
+            src={post.avatar}
             alt="Avatar"
             className="overflow-hidden rounded-full"
           />

@@ -5,14 +5,14 @@ import Markdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 
 export default async function Blog({ params }: { params: any }) {
-  let markdown;
+  let data;
 
   try {
     const response = await fetch(
       `${configuration.APP.BACKEND_URL}/api/v1/post/${params.slug}`,
       {
         cache: "no-cache",
-      },
+      }
     );
 
     if (!response.ok) {
@@ -20,7 +20,7 @@ export default async function Blog({ params }: { params: any }) {
     }
 
     const body = await response.json();
-    markdown = body.metadata.content;
+    data = body.metadata;
   } catch (e) {
     redirect("/");
   }
@@ -34,17 +34,19 @@ export default async function Blog({ params }: { params: any }) {
           className="overflow-hidden rounded-full"
         >
           <img
-            src="https://avatar.iran.liara.run/public/48"
+            src={data.avatar}
             alt="Avatar"
             className="overflow-hidden rounded-full"
           />
         </Button>
-        <p className="text-sm">トゥアン</p>
+        <p className="text-sm">{data.username}</p>
         <div>・</div>
-        <p className="text-sm">14/07/2024</p>
+        <p className="text-sm">
+          {(data.created_at as string).split("T")[0].replaceAll("-", "/")}
+        </p>
       </div>
       <article className="prose dark:prose-invert">
-        <Markdown remarkPlugins={[remarkGfm]}>{markdown}</Markdown>
+        <Markdown remarkPlugins={[remarkGfm]}>{data.content}</Markdown>
       </article>
     </section>
   );

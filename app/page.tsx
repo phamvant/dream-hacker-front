@@ -7,6 +7,7 @@ export interface Post {
   total_comments: number;
   saved: number;
   username: string;
+  avatar: string;
   created_at: string;
 }
 

@@ -14,12 +14,12 @@ import {
 import configuration from "@/app/config/configuration";
 
 export default function ProfileButton() {
-  const [isAuth, setAuth] = useState<any>(false);
+  const [session, setSession] = useState<any>(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       const session = await getSession();
-      setAuth(session);
+      setSession(session);
     };
 
     checkAuth();
@@ -29,15 +29,11 @@ export default function ProfileButton() {
     window.open(`${configuration.APP.BACKEND_URL}/auth/logout`, "_self");
   };
 
-  return isAuth ? (
+  return session ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" className="rounded-full">
-          <img
-            src="https://avatar.iran.liara.run/public/48"
-            alt="Avatar"
-            className="rounded-full"
-          />
+          <img src={session.avatar} alt="Avatar" className="rounded-full" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
