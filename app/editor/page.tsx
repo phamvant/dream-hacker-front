@@ -20,8 +20,12 @@ export default function EditorPage() {
   }
 
   const savePost = async () => {
+    if (title.length < 20 || markdown.length < 100) {
+      return;
+    }
+
     const ret = await fetch(
-      `${configuration.APP.BACKEND_URL}/api/v1/post/create`,
+      `${configuration.APP.BACKEND_URL}/admin/post/create`,
       {
         method: "POST",
         headers: {
@@ -32,8 +36,12 @@ export default function EditorPage() {
           title: title,
           content: markdown,
         }),
-      },
+      }
     );
+
+    if (!ret.ok) {
+      return;
+    }
   };
 
   useEffect(() => {

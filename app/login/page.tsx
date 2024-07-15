@@ -51,11 +51,11 @@ export default async function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="hidden lg:block">
+      <div className="hidden lg:flex lg:flex-col lg:justify-center">
         <img
           src="https://hire-quotient-notion-clone-aashish.vercel.app/assets/hero1-HqjeD6Yh.png"
           alt="Image"
-          className="h-full w-full object-contain"
+          className="h-1/2 w-full object-contain dark:backdrop-invert rounded-2xl"
         />
       </div>
     </div>
