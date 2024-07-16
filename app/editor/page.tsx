@@ -32,7 +32,9 @@ const validate = (input: { title: string; content: string }) => {
 
 export default function EditorPage() {
   let preData = "[]";
-  const [publishStatus, setPublicStatus] = useState<string>("idle");
+  const [publishStatus, setPublicStatus] = useState<
+    "idle" | "fetching" | "error" | "done"
+  >("idle");
   const [title, setTitle] = useState<string>("");
   const [markdown, setMarkdown] = useState<string>("");
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -51,24 +53,33 @@ export default function EditorPage() {
       return false;
     }
 
-    const ret = await fetch(
-      `${configuration.APP.BACKEND_URL}/admin/post/create`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          title: title,
-          content: markdown,
-        }),
+    setPublicStatus("fetching");
+    setTimeout(() => publish(), 2000);
+    const publish = async () => {
+      try {
+        const ret = await fetch(
+          `${configuration.APP.BACKEND_URL}/admin/post/create`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              title: title,
+              content: markdown,
+            }),
+          }
+        );
+        if (!ret.ok) {
+          throw new Error();
+        } else {
+          setPublicStatus("done");
+        }
+      } catch (error) {
+        setPublicStatus("error");
       }
-    );
-
-    if (!ret.ok) {
-      return;
-    }
+    };
   };
 
   useEffect(() => {

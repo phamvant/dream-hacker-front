@@ -31,6 +31,7 @@ export default function EditorTopbar({ onPublish, status }: Props) {
                   done: "Published",
                   error: "Error",
                   idle: "Publish",
+                  fetching: "Publishing",
                 }}
               />
             </div>
