@@ -13,7 +13,8 @@ interface ConfigArgs {
 const development: ConfigArgs = {
   NAME: "development",
   APP: {
-    BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL_DEV || "",
+    BACKEND_URL:
+      process.env.NEXT_PUBLIC_BACKEND_URL_DEV || "http://localhost:8080",
   },
 };
 

@@ -1,12 +1,34 @@
 "use client";
 
 import EditorTopbar from "@/components/EditorTopBar";
-import { Block } from "@blocknote/core";
+import { Block, contentNodeToInlineContent } from "@blocknote/core";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import configuration from "../config/configuration";
+import { z } from "zod";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
+
+const submitPostSchema = z.object({
+  title: z.string().min(20, {
+    message: "Title must be at least 20 characters.",
+  }),
+  content: z.string().min(100, {
+    message: "Content must be at least 100 characters.",
+  }),
+});
+
+const validate = (input: { title: string; content: string }) => {
+  try {
+    submitPostSchema.parse(input);
+    return true;
+  } catch (err: any) {
+    if (err instanceof z.ZodError) {
+      alert(err.issues.map((e) => e.message + "\n"));
+    }
+    return false;
+  }
+};
 
 export default function EditorPage() {
   let preData = "[]";
@@ -20,8 +42,13 @@ export default function EditorPage() {
   }
 
   const savePost = async () => {
-    if (title.length < 20 || markdown.length < 100) {
-      return;
+    const isValid = validate({
+      title: title,
+      content: markdown,
+    });
+
+    if (!isValid) {
+      return false;
     }
 
     const ret = await fetch(
