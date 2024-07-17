@@ -47,6 +47,7 @@ export default function Layout({
           <HighlightArea />
         </div>
       </div>
+      <div className="h-52 w-full"></div>
     </div>
   );
 }

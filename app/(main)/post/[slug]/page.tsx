@@ -46,7 +46,9 @@ export default async function Blog({ params }: { params: any }) {
         </p>
       </div>
       <article className="prose dark:prose-invert">
-        <Markdown remarkPlugins={[remarkGfm]}>{data.content}</Markdown>
+        <Markdown remarkPlugins={[remarkGfm]} className="xl:w-[112%]">
+          {data.content}
+        </Markdown>
       </article>
     </section>
   );
