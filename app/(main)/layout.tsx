@@ -6,6 +6,7 @@ import Topbar from "@/components/Topbar";
 import { getSession } from "@/lib/auth/auth";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import configuration from "../config/configuration";
 
 export default function Layout({
   children,
@@ -15,6 +16,7 @@ export default function Layout({
   const [session, setSession] = useState<any>(false);
   const [isShowSidebar, setShowSidebar] = useState<boolean>(false);
   const [isFetching, setFetch] = useState<boolean>(true);
+  const [featurePosts, setFeaturePosts] = useState<any[]>([]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -24,6 +26,30 @@ export default function Layout({
     };
 
     checkAuth();
+  }, []);
+
+  useEffect(() => {
+    const getFeaturePost = async () => {
+      try {
+        const ret = await fetch(
+          `${configuration.APP.BACKEND_URL}/api/v1/post/feature?number=10`,
+          {
+            cache: "no-cache",
+            credentials: "include",
+          }
+        );
+
+        const postsData = (await ret.json()).metadata;
+
+        if (postsData) {
+          setFeaturePosts(postsData);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getFeaturePost();
   }, []);
 
   return (
@@ -44,7 +70,7 @@ export default function Layout({
           {children}
         </div>
         <div className="relative hidden xl:block md:col-span-1">
-          <HighlightArea />
+          <HighlightArea posts={featurePosts} />
         </div>
       </div>
       <div className="h-52 w-full"></div>

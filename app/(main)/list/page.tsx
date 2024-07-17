@@ -142,9 +142,6 @@ export default async function List({
   let totalPage: number = 0;
 
   try {
-    console.log(
-      `${configuration.APP.BACKEND_URL}/api/v1/post?category=${searchParams.category}&page=${searchParams.page}`
-    );
     const ret = await fetch(
       `${configuration.APP.BACKEND_URL}/api/v1/post?category=${searchParams.category}&page=${searchParams.page}`,
       {
