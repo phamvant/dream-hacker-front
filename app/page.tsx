@@ -13,6 +13,4 @@ export interface Post {
 
 export default async function Home() {
   redirect("/list?category=1&page=1");
-
-  return <div className="h-screen"></div>;
 }
