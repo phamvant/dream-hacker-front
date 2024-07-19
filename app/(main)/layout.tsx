@@ -1,12 +1,9 @@
 "use client";
 
-import HighlightArea from "@/components/HighlightArea";
 import SideBar from "@/components/SideBar";
 import Topbar from "@/components/Topbar";
 import { getSession } from "@/lib/auth/auth";
-import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import configuration from "../config/configuration";
 
 export default function Layout({
   children,

@@ -13,9 +13,6 @@ import {
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
 import HighlightArea from "@/components/HighlightArea";
-import { Suspense } from "react";
-import PostPreviewSuspense from "@/components/suspense/PostPreviewSuspense";
-import FeaturePostSuspense from "@/components/suspense/FeaturePostSuspense";
 
 function ListPagePaging({
   className,
@@ -160,7 +157,7 @@ export default async function List({
       }
     );
 
-    const fetchFeature = await fetch(
+    const fetchFeature = fetch(
       `${configuration.APP.BACKEND_URL}/api/v1/post/feature?number=10`,
       {
         cache: "no-cache",

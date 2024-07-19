@@ -52,7 +52,7 @@ export default async function PostPreviewArea({ posts }: { posts: Post[] }) {
   return (
     <div className="flex flex-col gap-4 md:gap-10">
       {posts.map((post, idx) => (
-        <Link href={"/post/" + post.id} key={idx}>
+        <Link href={"/post/" + post.id} key={idx} prefetch={true}>
           <PostPreviewCard post={post} />
         </Link>
       ))}
