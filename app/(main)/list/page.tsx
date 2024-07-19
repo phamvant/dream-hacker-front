@@ -168,6 +168,7 @@ export default async function List({
     }
 
     totalPage = data.metadata.totalPage;
+    posts = data.metadata.posts;
   } catch (err) {
     console.log(err);
   } finally {
@@ -195,34 +196,31 @@ export default async function List({
               </div>
             }
           >
-            <PostPreviewArea
-              category={Number(searchParams.category)}
-              page={Number(searchParams.page)}
-            />
+            <PostPreviewArea posts={posts} />
           </Suspense>
 
+          <ListPagePaging
+            className="mt-10"
+            currentPage={Number(searchParams.page)}
+            currentCategory={Number(searchParams.category)}
+            totalPage={totalPage}
+          />
+        </div>
+        <div className="relative hidden xl:block md:col-span-1">
           <Suspense
             fallback={
               <div className="flex flex-col gap-10">
                 {Array.from({ length: 3 }, (_, index) => (
                   <div key={index}>
-                    <Skeleton className="w-full h-10 rounded-xl" />
+                    <Skeleton className="w-full h-10 rounded-xl mb-10" />
                     <Skeleton className="w-1/2 h-10 rounded-xl" />
                   </div>
                 ))}
               </div>
             }
           >
-            <ListPagePaging
-              className="mt-10"
-              currentPage={Number(searchParams.page)}
-              currentCategory={Number(searchParams.category)}
-              totalPage={totalPage}
-            />
+            <HighlightArea />
           </Suspense>
-        </div>
-        <div className="relative hidden xl:block md:col-span-1">
-          <HighlightArea />
         </div>
       </div>
     </div>

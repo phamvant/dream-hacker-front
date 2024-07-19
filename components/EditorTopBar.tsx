@@ -7,9 +7,10 @@ import ProfileButton from "./ProfileButton";
 interface Props {
   onPublish: () => void;
   status: string;
+  session: any;
 }
 
-export default function EditorTopbar({ onPublish, status }: Props) {
+export default function EditorTopbar({ onPublish, status, session }: Props) {
   return (
     <div className="fixed top-0 left-0 w-full md:static z-10 backdrop-filter backdrop-blur-xl px-4 md:px-0">
       <section className="flex items-center justify-between pt-8 mb-12">
@@ -36,7 +37,7 @@ export default function EditorTopbar({ onPublish, status }: Props) {
               />
             </div>
           </nav>
-          <ProfileButton />
+          <ProfileButton session={session} />
         </div>
       </section>
     </div>

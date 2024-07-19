@@ -33,7 +33,6 @@ export const getSession = async () => {
 
     return (await res.json()).metadata;
   } catch (err) {
-    console.log(err);
     return false;
   }
 };

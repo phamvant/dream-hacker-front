@@ -51,44 +51,7 @@ function PostPreviewCard({ post }: { post: Post }) {
   );
 }
 
-export default async function PostPreviewArea({
-  category,
-  page,
-}: {
-  category: number;
-  page: number;
-}) {
-  let posts: any[] = [{}];
-
-  try {
-    const ret = await fetch(
-      `${configuration.APP.BACKEND_URL}/api/v1/post?category=${category}&page=${page}`,
-      {
-        cache: "no-cache",
-        credentials: "include",
-        headers: { Cookie: cookies().toString() },
-      }
-    );
-
-    if (!ret.ok) {
-      throw new Error("Fetch failed");
-    }
-
-    const data = await ret.json();
-
-    if (!data.metadata) {
-      throw new Error("No data");
-    }
-
-    posts = data.metadata.posts;
-  } catch (err) {
-    console.log(err);
-  } finally {
-    if (!posts.length) {
-      return notFound();
-    }
-  }
-
+export default async function PostPreviewArea({ posts }: { posts: any[] }) {
   return (
     <div className="flex flex-col gap-4 md:gap-10">
       {posts.map((post, idx) => (
