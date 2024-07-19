@@ -31,7 +31,7 @@ export default function HighlightArea({ posts }: { posts: any[] }) {
         })}
         <div
           className={`flex flex-col transition-all gap-4 duration-200 ${
-            isShowAll ? "max-h-0" : "max-h-[999px]"
+            !isShowAll ? "max-h-0" : "max-h-[999px]"
           } overflow-hidden`}
         >
           {posts.map((post, index) => {

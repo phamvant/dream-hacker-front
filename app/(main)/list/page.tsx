@@ -14,6 +14,8 @@ import {
 import { cn } from "@/lib/utils";
 import HighlightArea from "@/components/HighlightArea";
 import { Suspense } from "react";
+import PostPreviewSuspense from "@/components/suspense/PostPreviewSuspense";
+import FeaturePostSuspense from "@/components/suspense/FeaturePostSuspense";
 
 function ListPagePaging({
   className,
@@ -193,14 +195,13 @@ export default async function List({
   return (
     <div>
       <div className="flex items-center justify-center gap-10 pt-20 md:pt-0">
-        <img
-          src="https://www.overflow.design/src/assets/img/covers/oc.png"
-          className="w-2/5 dark:invert"
-        />
+        <img src="banner.png" className="w-2/5 dark:invert" />
       </div>
       <div className={cn(`grid grid-cols-3 gap-10 pt-10`)}>
         <div className="relative col-span-3 xl:col-span-2 rounded-lg">
-          <PostPreviewArea posts={posts} />
+          <Suspense fallback={<PostPreviewSuspense />}>
+            <PostPreviewArea posts={posts} />
+          </Suspense>
           <ListPagePaging
             className="mt-10"
             currentPage={Number(searchParams.page)}
@@ -209,7 +210,9 @@ export default async function List({
           />
         </div>
         <div className="relative hidden xl:block md:col-span-1">
-          <HighlightArea posts={featurePosts} />
+          <Suspense fallback={<FeaturePostSuspense />}>
+            <HighlightArea posts={featurePosts} />
+          </Suspense>
         </div>
       </div>
     </div>
