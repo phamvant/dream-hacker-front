@@ -151,7 +151,7 @@ export default async function List({
   let featurePosts: any;
 
   try {
-    const ret = await fetch(
+    const fetchPage = fetch(
       `${configuration.APP.BACKEND_URL}/api/v1/post?category=${searchParams.category}&page=${searchParams.page}`,
       {
         cache: "no-cache",
@@ -160,11 +160,29 @@ export default async function List({
       }
     );
 
-    const postsData = (await ret.json()).metadata;
+    const fetchFeature = await fetch(
+      `${configuration.APP.BACKEND_URL}/api/v1/post/feature?number=10`,
+      {
+        cache: "no-cache",
+        credentials: "include",
+      }
+    );
 
-    if (postsData) {
-      posts = postsData.posts;
-      totalPage = postsData.totalPage;
+    const [pagePost, featurePost] = await Promise.all([
+      fetchPage,
+      fetchFeature,
+    ]);
+
+    const postsData = await pagePost.json();
+    const featurePostsData = await featurePost.json();
+
+    if (featurePostsData.metadata) {
+      featurePosts = featurePostsData.metadata;
+    }
+
+    if (postsData.metadata) {
+      posts = postsData.metadata.posts;
+      totalPage = postsData.metadata.totalPage;
     }
   } catch (err) {
     console.log(err);
@@ -174,24 +192,6 @@ export default async function List({
     }
   }
 
-  try {
-    const ret = await fetch(
-      `${configuration.APP.BACKEND_URL}/api/v1/post/feature?number=10`,
-      {
-        cache: "no-cache",
-        credentials: "include",
-      }
-    );
-
-    const postsData = (await ret.json()).metadata;
-
-    if (postsData) {
-      featurePosts = postsData;
-    }
-  } catch (err) {
-    console.log(err);
-  }
-
   return (
     <div>
       <div className="flex items-center justify-center gap-10 pt-20 md:pt-0">
@@ -199,9 +199,7 @@ export default async function List({
       </div>
       <div className={cn(`grid grid-cols-3 gap-10 pt-10`)}>
         <div className="relative col-span-3 xl:col-span-2 rounded-lg">
-          <Suspense fallback={<PostPreviewSuspense />}>
-            <PostPreviewArea posts={posts} />
-          </Suspense>
+          <PostPreviewArea posts={posts} />
           <ListPagePaging
             className="mt-10"
             currentPage={Number(searchParams.page)}
@@ -210,9 +208,7 @@ export default async function List({
           />
         </div>
         <div className="relative hidden xl:block md:col-span-1">
-          <Suspense fallback={<FeaturePostSuspense />}>
-            <HighlightArea posts={featurePosts} />
-          </Suspense>
+          <HighlightArea posts={featurePosts} />
         </div>
       </div>
     </div>

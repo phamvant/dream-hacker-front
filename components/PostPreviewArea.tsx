@@ -1,6 +1,7 @@
 import { Post } from "@/app/page";
 import Link from "next/link";
 import { BookMarked, MessagesSquare, ThumbsUp } from "lucide-react";
+import { Suspense } from "react";
 
 function PostPreviewCard({ post }: { post: Post }) {
   return (
