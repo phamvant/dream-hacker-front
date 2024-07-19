@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { inter } from "./ui/fonts";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Topbar from "@/components/NavigationBar";
 import { Inter as FontSans } from "next/font/google";
 import { ThemeProvider } from "./ui/ThemeProvider";
 

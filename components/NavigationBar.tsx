@@ -6,8 +6,7 @@ import { AlignJustify } from "lucide-react";
 import ProfileButton from "./ProfileButton";
 import { Button } from "./ui/button";
 import SideBar from "./SideBar";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { getSession } from "@/lib/auth/auth";
+import { Dispatch, SetStateAction, useState } from "react";
 
 function Topbar({
   session,
@@ -46,18 +45,8 @@ function Topbar({
   );
 }
 
-export default function NavigationBar() {
+export default function NavigationBar({ session }: { session: any }) {
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [session, setSession] = useState<any>(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const session = await getSession();
-      setSession(session);
-    };
-
-    checkAuth();
-  }, []);
 
   return (
     <div>

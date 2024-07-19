@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import configuration from "../config/configuration";
 import { z } from "zod";
-import { getSession } from "@/lib/auth/auth";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
@@ -31,7 +30,7 @@ const validate = (input: { title: string; content: string }) => {
   }
 };
 
-export default function EditorPage() {
+export default function EditorPage({ session }: { session: any }) {
   let preData = "[]";
   const [publishStatus, setPublicStatus] = useState<
     "idle" | "fetching" | "error" | "done"
@@ -39,16 +38,6 @@ export default function EditorPage() {
   const [title, setTitle] = useState<string>("");
   const [markdown, setMarkdown] = useState<string>("");
   const [blocks, setBlocks] = useState<Block[]>([]);
-  const [session, setSession] = useState<any>(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const session = await getSession();
-      setSession(session);
-    };
-
-    checkAuth();
-  }, []);
 
   if (typeof window !== "undefined") {
     preData = localStorage.getItem("documentData") || "[]";
