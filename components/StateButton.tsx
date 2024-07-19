@@ -16,7 +16,7 @@ interface Props {
   status: string;
   state: IButtonState;
   className: string;
-  size: any;
+  size?: any;
   onClick: () => void;
 }
 
@@ -41,7 +41,7 @@ export const StateButton = ({
           : "default"
       }
       onClick={onClick}
-      size={size}
+      // size={size}
       type="submit"
       className={cn(className)}
     >

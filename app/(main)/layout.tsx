@@ -7,7 +7,7 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = getServerSession(cookies());
+  const session = await getServerSession(cookies());
   return (
     <div className="max-w-3xl xl:max-w-7xl px-4 m-auto min-h-screen">
       <NavigationBar session={session} />

@@ -1,13 +1,12 @@
+import EditorTopbar from "@/components/EditorTopBar";
 import { getServerSession } from "@/lib/auth/auth";
-import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import EditorPage from "./page";
+import { redirect } from "next/navigation";
+import { ReactNode } from "react";
 
-export default async function EditorLayout({
+export default async function Layout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: ReactNode }>) {
   const session = await getServerSession(cookies());
 
   if (!["ADMIN", "MODDER"].includes(session.role)) {
@@ -16,7 +15,8 @@ export default async function EditorLayout({
 
   return (
     <div className="px-4 xl:px-32 m-auto">
-      <EditorPage session={session} />
+      <EditorTopbar session={session} />
+      {children}
     </div>
   );
 }

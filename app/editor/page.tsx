@@ -1,13 +1,14 @@
 "use client";
 
-import EditorTopbar from "@/components/EditorTopBar";
-import { Block } from "@blocknote/core";
-import dynamic from "next/dynamic";
-import { useState, useEffect } from "react";
-import configuration from "../config/configuration";
+import { Dispatch, SetStateAction, useState } from "react";
 import { z } from "zod";
-
-const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
+import configuration from "../config/configuration";
+import { useCreateBlockNote } from "@blocknote/react";
+import { useTheme } from "next-themes";
+import { Block } from "@blocknote/core";
+import { BlockNoteView } from "@blocknote/mantine";
+import "@blocknote/mantine/style.css";
+import { StateButton } from "@/components/StateButton";
 
 const submitPostSchema = z.object({
   title: z.string().min(20, {
@@ -30,88 +31,115 @@ const validate = (input: { title: string; content: string }) => {
   }
 };
 
-export default function EditorPage({ session }: { session: any }) {
-  let preData = "[]";
+const convertPost = async ({ editor }: { editor: any }) => {
+  let title: string = "";
+  const markdown = await editor.blocksToMarkdownLossy(editor.document);
+  if ((editor.document[0].content as { text: string }[]).length) {
+    title = (editor.document[0].content as { text: string }[])[0].text;
+  }
+
+  return { title, markdown };
+};
+
+const publishPost = async ({
+  editor,
+  setStatus,
+}: {
+  editor: any;
+  setStatus: Dispatch<SetStateAction<"idle" | "fetching" | "error" | "done">>;
+}) => {
+  const { title, markdown } = await convertPost({ editor: editor });
+
+  const isValid = validate({
+    title: title,
+    content: markdown,
+  });
+
+  if (!isValid) {
+    return false;
+  }
+
+  setStatus("fetching");
+  setTimeout(() => publish(), 2000);
+  const publish = async () => {
+    try {
+      const ret = await fetch(
+        `${configuration.APP.BACKEND_URL}/admin/post/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            title: title,
+            content: markdown,
+          }),
+        }
+      );
+      if (!ret.ok) {
+        throw new Error();
+      } else {
+        setStatus("done");
+      }
+    } catch (error) {
+      setStatus("error");
+    }
+  };
+};
+
+export default function EditorPage() {
+  const { theme } = useTheme();
+
   const [publishStatus, setPublicStatus] = useState<
     "idle" | "fetching" | "error" | "done"
   >("idle");
-  const [title, setTitle] = useState<string>("");
-  const [markdown, setMarkdown] = useState<string>("");
-  const [blocks, setBlocks] = useState<Block[]>([]);
 
-  if (typeof window !== "undefined") {
-    preData = localStorage.getItem("documentData") || "[]";
-  }
-
-  const savePost = async () => {
-    const isValid = validate({
-      title: title,
-      content: markdown,
-    });
-
-    if (!isValid) {
-      return false;
-    }
-
-    setPublicStatus("fetching");
-    setTimeout(() => publish(), 2000);
-    const publish = async () => {
-      try {
-        const ret = await fetch(
-          `${configuration.APP.BACKEND_URL}/admin/post/create`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              title: title,
-              content: markdown,
-            }),
-          }
-        );
-        if (!ret.ok) {
-          throw new Error();
-        } else {
-          setPublicStatus("done");
-        }
-      } catch (error) {
-        setPublicStatus("error");
-      }
-    };
-  };
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("documentData", JSON.stringify(blocks));
-    }
-  }, [blocks]);
+  const editor = useCreateBlockNote({
+    initialContent:
+      localStorage.getItem("documentData") !== "[]"
+        ? (JSON.parse(localStorage.getItem("documentData")!) as Block[])
+        : [],
+  });
 
   return (
-    <div>
-      <EditorTopbar
-        onPublish={savePost}
+    <div className="flex gap-2">
+      <div className="hidden flex-col w-80 border rounded-xl p-4 gap-4">
+        <div className="p-2 text-xl font-bold">Editor tools</div>
+        <div className="border rounded-xl p-2 h-40" />
+        <div className="border rounded-xl p-2 h-40" />
+        <div className="border rounded-xl p-2 h-40" />
+        <div className="border rounded-xl p-2 h-40" />
+      </div>
+      <StateButton
+        onClick={() =>
+          publishPost({
+            editor: editor,
+            setStatus: setPublicStatus,
+          })
+        }
         status={publishStatus}
-        session={session}
+        state={{
+          done: "Published",
+          error: "Error",
+          fetching: "Publishing",
+          idle: "Publish",
+        }}
+        className="fixed right-40 bottom-20 rounded-full size-20"
       />
-      <div className="flex gap-2">
-        <div className="hidden flex-col w-80 border rounded-xl p-4 gap-4">
-          <div className="p-2 text-xl font-bold">Editor tools</div>
-          <div className="border rounded-xl p-2 h-40" />
-          <div className="border rounded-xl p-2 h-40" />
-          <div className="border rounded-xl p-2 h-40" />
-          <div className="border rounded-xl p-2 h-40" />
-        </div>
-        <div className="xl:border min-h-screen p-6 pt-10 rounded-xl w-full">
-          <Editor
-            setTitle={setTitle}
-            setBlocks={setBlocks}
-            setMarkdown={setMarkdown}
-            initialContent={preData}
-            editable={false}
-          />
-        </div>
+      <div className="xl:border min-h-screen p-6 pt-10 rounded-xl w-full">
+        <BlockNoteView
+          color="red"
+          theme={theme as "dark" | "light"}
+          onChange={() => {
+            localStorage.setItem(
+              "documentData",
+              JSON.stringify(editor.document)
+            );
+          }}
+          editor={editor}
+          data-theming-css-variables-demo
+        />
       </div>
     </div>
   );
