@@ -18,11 +18,9 @@ export const menuItems: MenuItem[] = [
 
 export default function TopbarNavigator({
   session,
-  isFetching,
   className,
 }: {
   session: any;
-  isFetching: boolean;
   className: string;
 }) {
   return (
@@ -47,9 +45,9 @@ export default function TopbarNavigator({
             );
           }
         })}
-        {session && !isFetching ? (
+        {session ? (
           <div className="ml-4 md:ml-8">
-            <ProfileButton />
+            <ProfileButton session={session} />
           </div>
         ) : (
           <Button className="rounded-full ml-4 md:ml-8" variant={"default"}>

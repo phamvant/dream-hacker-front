@@ -9,13 +9,11 @@ export default function SideBar({
   isShow,
   onClickShowSidebar,
   session,
-  isFetching,
 }: {
   className?: string;
   isShow: boolean;
-  onClickShowSidebar?: Dispatch<SetStateAction<boolean>>;
+  onClickShowSidebar: Dispatch<SetStateAction<boolean>>;
   session: any;
-  isFetching: boolean;
 }) {
   return (
     <div
@@ -37,7 +35,7 @@ export default function SideBar({
           </a>
           <ChevronsLeft
             className="text-blue-700/80 dark:text-blue-500"
-            // onClick={() => onClickShowSidebar((prevState) => !prevState)}
+            onClick={() => onClickShowSidebar((prevState) => !prevState)}
           />
         </div>
         <nav className="w-full flex flex-col flex-wrap ">

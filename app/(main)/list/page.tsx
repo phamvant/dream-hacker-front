@@ -141,40 +141,40 @@ export default async function List({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  // if (!searchParams.category || !searchParams.page) {
-  //   notFound();
-  // }
+  if (!searchParams.category || !searchParams.page) {
+    notFound();
+  }
 
-  // let totalPage: number = 0;
+  let totalPage: number = 0;
 
-  // let posts: any[] = [{}];
-  // try {
-  //   const ret = await fetch(
-  //     `${configuration.APP.BACKEND_URL}/api/v1/post?category=${searchParams.category}&page=${searchParams.page}`,
-  //     {
-  //       credentials: "include",
-  //       headers: { Cookie: cookies().toString() },
-  //     }
-  //   );
+  let posts: any[] = [{}];
+  try {
+    const ret = await fetch(
+      `${configuration.APP.BACKEND_URL}/api/v1/post?category=${searchParams.category}&page=${searchParams.page}`,
+      {
+        credentials: "include",
+        headers: { Cookie: cookies().toString() },
+      }
+    );
 
-  //   if (!ret.ok) {
-  //     throw new Error("Fetch failed");
-  //   }
+    if (!ret.ok) {
+      throw new Error("Fetch failed");
+    }
 
-  //   const data = await ret.json();
+    const data = await ret.json();
 
-  //   if (!data.metadata) {
-  //     throw new Error("No data");
-  //   }
+    if (!data.metadata) {
+      throw new Error("No data");
+    }
 
-  //   totalPage = data.metadata.totalPage;
-  // } catch (err) {
-  //   console.log(err);
-  // } finally {
-  //   if (!posts.length) {
-  //     return notFound();
-  //   }
-  // }
+    totalPage = data.metadata.totalPage;
+  } catch (err) {
+    console.log(err);
+  } finally {
+    if (!posts.length) {
+      return notFound();
+    }
+  }
 
   return (
     <div>
@@ -183,23 +183,47 @@ export default async function List({
       </div>
       <div className={cn(`grid grid-cols-3 gap-10 pt-10`)}>
         <div className="relative col-span-3 xl:col-span-2 rounded-lg">
-          <Suspense fallback={<p>Loading...</p>}>
+          <Suspense
+            fallback={
+              <div className="flex flex-col gap-10">
+                {Array.from({ length: 6 }, (_, index) => (
+                  <div key={index}>
+                    <Skeleton className="w-full h-10 rounded-xl" />
+                    <Skeleton className="w-1/2 h-10 rounded-xl" />
+                  </div>
+                ))}
+              </div>
+            }
+          >
             <PostPreviewArea
               category={Number(searchParams.category)}
               page={Number(searchParams.page)}
             />
           </Suspense>
 
-          {/* <ListPagePaging
-            className="mt-10"
-            currentPage={Number(searchParams.page)}
-            currentCategory={Number(searchParams.category)}
-            totalPage={totalPage}
-          /> */}
+          <Suspense
+            fallback={
+              <div className="flex flex-col gap-10">
+                {Array.from({ length: 3 }, (_, index) => (
+                  <div key={index}>
+                    <Skeleton className="w-full h-10 rounded-xl" />
+                    <Skeleton className="w-1/2 h-10 rounded-xl" />
+                  </div>
+                ))}
+              </div>
+            }
+          >
+            <ListPagePaging
+              className="mt-10"
+              currentPage={Number(searchParams.page)}
+              currentCategory={Number(searchParams.category)}
+              totalPage={totalPage}
+            />
+          </Suspense>
         </div>
-        {/* <div className="relative hidden xl:block md:col-span-1">
+        <div className="relative hidden xl:block md:col-span-1">
           <HighlightArea />
-        </div> */}
+        </div>
       </div>
     </div>
   );

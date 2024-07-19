@@ -1,20 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import TopbarNavigator from "./TopbarNavigator";
 import { AlignJustify } from "lucide-react";
 import ProfileButton from "./ProfileButton";
 import { Button } from "./ui/button";
+import SideBar from "./SideBar";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { getSession } from "@/lib/auth/auth";
 
-export default function Topbar({
-  onClickShowSidebar,
+function Topbar({
   session,
-  isFetching,
+  setSidebarOpen,
 }: {
-  onClickShowSidebar?: Dispatch<SetStateAction<boolean>>;
   session: any;
-  isFetching: boolean;
+  setSidebarOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
     <div className="fixed top-0 left-0 w-full md:static z-10 backdrop-filter backdrop-blur-lg px-4 md:px-0 bg-white/10 dark:bg-black/10">
@@ -22,7 +22,7 @@ export default function Topbar({
         <AlignJustify
           className="flex md:hidden"
           aria-label="Toggle navigation"
-          // onClick={() => onClickShowSidebar((prevState) => !prevState)}
+          onClick={() => setSidebarOpen((prevState) => !prevState)}
         />
         <div className="flex-grow flex justify-center md:justify-start">
           <Link href="/">
@@ -31,14 +31,10 @@ export default function Topbar({
             </h1>
           </Link>
         </div>
-        <TopbarNavigator
-          session={session}
-          isFetching={isFetching}
-          className="hidden md:flex"
-        />
+        <TopbarNavigator session={session} className="hidden md:flex" />
         {session ? (
           <div className="md:hidden">
-            <ProfileButton />
+            <ProfileButton session={session} />
           </div>
         ) : (
           <Button className="rounded-full md:hidden" variant={"default"}>
@@ -46,6 +42,31 @@ export default function Topbar({
           </Button>
         )}
       </section>
+    </div>
+  );
+}
+
+export default function NavigationBar() {
+  const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [session, setSession] = useState<any>(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const session = await getSession();
+      setSession(session);
+    };
+
+    checkAuth();
+  }, []);
+
+  return (
+    <div>
+      <SideBar
+        session={session}
+        onClickShowSidebar={setSidebarOpen}
+        isShow={isSidebarOpen}
+      />
+      <Topbar session={session} setSidebarOpen={setSidebarOpen} />
     </div>
   );
 }

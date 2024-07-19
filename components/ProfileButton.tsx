@@ -1,7 +1,3 @@
-"use client";
-
-import { getSession } from "@/lib/auth/auth";
-import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -13,18 +9,7 @@ import {
 } from "./ui/dropdown-menu";
 import configuration from "@/app/config/configuration";
 
-export default function ProfileButton() {
-  const [session, setSession] = useState<any>(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const session = await getSession();
-      setSession(session);
-    };
-
-    checkAuth();
-  }, []);
-
+export default function ProfileButton({ session }: { session: any }) {
   const logout = () => {
     window.open(`${configuration.APP.BACKEND_URL}/auth/logout`, "_self");
   };
