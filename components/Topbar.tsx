@@ -1,6 +1,5 @@
 "use client";
 
-import { getSession } from "@/lib/auth/auth";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import TopbarNavigator from "./TopbarNavigator";

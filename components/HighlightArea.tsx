@@ -48,7 +48,9 @@ export default function HighlightArea({ posts }: { posts: any[] }) {
       <Button
         className="w-full rounded-full mt-4"
         onClick={() => setShowAll((prev) => !prev)}
-      ></Button>
+      >
+        {!isShowAll ? "Show less" : "Show more"}
+      </Button>
     </>
   );
 }

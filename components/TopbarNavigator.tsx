@@ -11,8 +11,8 @@ export interface MenuItem {
 }
 
 export const menuItems: MenuItem[] = [
-  { name: "MBA", href: "/mba" },
-  { name: "PhD", href: "/phd" },
+  { name: "MBA", href: "/list?category=1&page=1" },
+  { name: "PhD", href: "/list?category=2&page=1" },
   { name: "Editor", href: "/editor", role: "ADMIN" },
 ];
 
@@ -25,7 +25,7 @@ export default function TopbarNavigator({
   isFetching: boolean;
   className: string;
 }) {
-  return !isFetching ? (
+  return (
     <nav>
       <div className={cn(className, "items-center")}>
         <ModeToggle />
@@ -47,7 +47,7 @@ export default function TopbarNavigator({
             );
           }
         })}
-        {session ? (
+        {session && !isFetching ? (
           <div className="ml-4 md:ml-8">
             <ProfileButton />
           </div>
@@ -58,5 +58,5 @@ export default function TopbarNavigator({
         )}
       </div>
     </nav>
-  ) : null;
+  );
 }

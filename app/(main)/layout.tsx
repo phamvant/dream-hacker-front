@@ -16,7 +16,6 @@ export default function Layout({
   const [session, setSession] = useState<any>(false);
   const [isShowSidebar, setShowSidebar] = useState<boolean>(false);
   const [isFetching, setFetch] = useState<boolean>(true);
-  const [featurePosts, setFeaturePosts] = useState<any[]>([]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -26,30 +25,6 @@ export default function Layout({
     };
 
     checkAuth();
-  }, []);
-
-  useEffect(() => {
-    const getFeaturePost = async () => {
-      try {
-        const ret = await fetch(
-          `${configuration.APP.BACKEND_URL}/api/v1/post/feature?number=10`,
-          {
-            cache: "no-cache",
-            credentials: "include",
-          }
-        );
-
-        const postsData = (await ret.json()).metadata;
-
-        if (postsData) {
-          setFeaturePosts(postsData);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    getFeaturePost();
   }, []);
 
   return (
@@ -65,14 +40,7 @@ export default function Layout({
         session={session}
         isFetching={isFetching}
       />
-      <div className={cn(`grid grid-cols-3 gap-10 pt-24 md:pt-10`)}>
-        <div className="relative col-span-3 xl:col-span-2 rounded-lg">
-          {children}
-        </div>
-        <div className="relative hidden xl:block md:col-span-1">
-          <HighlightArea posts={featurePosts} />
-        </div>
-      </div>
+      {children}
       <div className="h-52 w-full"></div>
     </div>
   );

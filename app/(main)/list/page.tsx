@@ -12,14 +12,18 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
+import HighlightArea from "@/components/HighlightArea";
+import { Suspense } from "react";
 
 function ListPagePaging({
   className,
   currentPage,
+  currentCategory,
   totalPage,
 }: {
   className?: string;
   currentPage: number;
+  currentCategory: number;
   totalPage: number;
 }) {
   return (
@@ -27,14 +31,15 @@ function ListPagePaging({
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            href={`list?category=1&page=${
+            href={`list?category=${currentCategory}&page=${
               currentPage > 1 ? currentPage - 1 : 1
             }`}
           />
         </PaginationItem>
         <PaginationItem>
           <PaginationLink
-            href={"list?category=1&page=1"}
+            prefetch={false}
+            href={`list?category=${currentCategory}&page=1`}
             isActive={currentPage === 1}
           >
             1
@@ -43,22 +48,22 @@ function ListPagePaging({
         {currentPage < 4 ? (
           <>
             <PaginationLink
-              prefetch={true}
-              href={"list?category=1&page=2"}
+              prefetch={false}
+              href={`list?category=${currentCategory}&page=2`}
               isActive={currentPage === 2}
             >
               2
             </PaginationLink>
             <PaginationLink
-              prefetch={true}
-              href={"list?category=1&page=3"}
+              prefetch={false}
+              href={`list?category=${currentCategory}&page=3`}
               isActive={currentPage === 3}
             >
               3
             </PaginationLink>
             <PaginationLink
-              prefetch={true}
-              href={"list?category=1&page=4"}
+              prefetch={false}
+              href={`list?category=${currentCategory}&page=4`}
               isActive={currentPage === 4}
             >
               4
@@ -73,14 +78,14 @@ function ListPagePaging({
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationLink
-              prefetch={true}
-              href={`list?category=1&page=${currentPage - 1}`}
+              prefetch={false}
+              href={`list?category=${currentCategory}&page=${currentPage - 1}`}
             >
               {currentPage - 1}
             </PaginationLink>
             <PaginationLink
-              prefetch={true}
-              href={`list?category=1&page=${currentPage}`}
+              prefetch={false}
+              href={`list?category=${currentCategory}&page=${currentPage}`}
               isActive={true}
             >
               {currentPage}
@@ -88,8 +93,10 @@ function ListPagePaging({
             {currentPage > 3 && currentPage < totalPage - 1 ? (
               <>
                 <PaginationLink
-                  prefetch={true}
-                  href={`list?category=1&page=${currentPage + 1}`}
+                  prefetch={false}
+                  href={`list?category=${currentCategory}&page=${
+                    currentPage + 1
+                  }`}
                 >
                   {currentPage + 1}
                 </PaginationLink>
@@ -106,8 +113,8 @@ function ListPagePaging({
         {currentPage < totalPage ? (
           <PaginationItem>
             <PaginationLink
-              prefetch={true}
-              href={`list?category=1&page=${totalPage}`}
+              prefetch={false}
+              href={`list?category=${currentCategory}&page=${totalPage}`}
               isActive={currentPage === totalPage}
             >
               {totalPage}
@@ -118,8 +125,7 @@ function ListPagePaging({
         )}
         <PaginationItem>
           <PaginationNext
-            prefetch={true}
-            href={`list?category=1&page=${
+            href={`list?category=${currentCategory}&page=${
               currentPage < totalPage ? currentPage + 1 : totalPage
             }`}
           />
@@ -140,6 +146,7 @@ export default async function List({
 
   let posts: any[] = [];
   let totalPage: number = 0;
+  let featurePosts: any;
 
   try {
     const ret = await fetch(
@@ -165,14 +172,46 @@ export default async function List({
     }
   }
 
+  try {
+    const ret = await fetch(
+      `${configuration.APP.BACKEND_URL}/api/v1/post/feature?number=10`,
+      {
+        cache: "no-cache",
+        credentials: "include",
+      }
+    );
+
+    const postsData = (await ret.json()).metadata;
+
+    if (postsData) {
+      featurePosts = postsData;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
   return (
     <div>
-      <PostPreviewArea posts={posts} />
-      <ListPagePaging
-        className="mt-10"
-        currentPage={Number(searchParams.page)}
-        totalPage={totalPage}
-      />
+      <div className="flex items-center justify-center gap-10 pt-20 md:pt-0">
+        <img
+          src="https://www.overflow.design/src/assets/img/covers/oc.png"
+          className="w-2/5 dark:invert"
+        />
+      </div>
+      <div className={cn(`grid grid-cols-3 gap-10 pt-10`)}>
+        <div className="relative col-span-3 xl:col-span-2 rounded-lg">
+          <PostPreviewArea posts={posts} />
+          <ListPagePaging
+            className="mt-10"
+            currentPage={Number(searchParams.page)}
+            currentCategory={Number(searchParams.category)}
+            totalPage={totalPage}
+          />
+        </div>
+        <div className="relative hidden xl:block md:col-span-1">
+          <HighlightArea posts={featurePosts} />
+        </div>
+      </div>
     </div>
   );
 }
