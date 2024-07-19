@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
 import HighlightArea from "@/components/HighlightArea";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Suspense } from "react";
 
 function ListPagePaging({
   className,
@@ -139,55 +141,40 @@ export default async function List({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  if (!searchParams.category || !searchParams.page) {
-    notFound();
-  }
+  // if (!searchParams.category || !searchParams.page) {
+  //   notFound();
+  // }
 
-  let posts: any[] = [];
-  let totalPage: number = 0;
-  let featurePosts: any;
+  // let totalPage: number = 0;
 
-  try {
-    const fetchPage = fetch(
-      `${configuration.APP.BACKEND_URL}/api/v1/post?category=${searchParams.category}&page=${searchParams.page}`,
-      {
-        cache: "no-cache",
-        credentials: "include",
-        headers: { Cookie: cookies().toString() },
-      }
-    );
+  // let posts: any[] = [{}];
+  // try {
+  //   const ret = await fetch(
+  //     `${configuration.APP.BACKEND_URL}/api/v1/post?category=${searchParams.category}&page=${searchParams.page}`,
+  //     {
+  //       credentials: "include",
+  //       headers: { Cookie: cookies().toString() },
+  //     }
+  //   );
 
-    const fetchFeature = fetch(
-      `${configuration.APP.BACKEND_URL}/api/v1/post/feature?number=10`,
-      {
-        cache: "no-cache",
-        credentials: "include",
-      }
-    );
+  //   if (!ret.ok) {
+  //     throw new Error("Fetch failed");
+  //   }
 
-    const [pagePost, featurePost] = await Promise.all([
-      fetchPage,
-      fetchFeature,
-    ]);
+  //   const data = await ret.json();
 
-    const postsData = await pagePost.json();
-    const featurePostsData = await featurePost.json();
+  //   if (!data.metadata) {
+  //     throw new Error("No data");
+  //   }
 
-    if (featurePostsData.metadata) {
-      featurePosts = featurePostsData.metadata;
-    }
-
-    if (postsData.metadata) {
-      posts = postsData.metadata.posts;
-      totalPage = postsData.metadata.totalPage;
-    }
-  } catch (err) {
-    console.log(err);
-  } finally {
-    if (!posts.length) {
-      redirect("/login");
-    }
-  }
+  //   totalPage = data.metadata.totalPage;
+  // } catch (err) {
+  //   console.log(err);
+  // } finally {
+  //   if (!posts.length) {
+  //     return notFound();
+  //   }
+  // }
 
   return (
     <div>
@@ -196,17 +183,23 @@ export default async function List({
       </div>
       <div className={cn(`grid grid-cols-3 gap-10 pt-10`)}>
         <div className="relative col-span-3 xl:col-span-2 rounded-lg">
-          <PostPreviewArea posts={posts} />
-          <ListPagePaging
+          <Suspense fallback={<p>Loading...</p>}>
+            <PostPreviewArea
+              category={Number(searchParams.category)}
+              page={Number(searchParams.page)}
+            />
+          </Suspense>
+
+          {/* <ListPagePaging
             className="mt-10"
             currentPage={Number(searchParams.page)}
             currentCategory={Number(searchParams.category)}
             totalPage={totalPage}
-          />
+          /> */}
         </div>
-        <div className="relative hidden xl:block md:col-span-1">
-          <HighlightArea posts={featurePosts} />
-        </div>
+        {/* <div className="relative hidden xl:block md:col-span-1">
+          <HighlightArea />
+        </div> */}
       </div>
     </div>
   );

@@ -1,39 +1,39 @@
-"use client";
-
 import SideBar from "@/components/SideBar";
 import Topbar from "@/components/Topbar";
-import { getSession } from "@/lib/auth/auth";
-import { useEffect, useState } from "react";
+import { getServerSession } from "@/lib/auth/auth";
+import { cookies } from "next/headers";
 
-export default function Layout({
+export default async function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [session, setSession] = useState<any>(false);
-  const [isShowSidebar, setShowSidebar] = useState<boolean>(false);
-  const [isFetching, setFetch] = useState<boolean>(true);
+  // const [session, setSession] = useState<any>(false);
+  // const [isShowSidebar, setShowSidebar] = useState<boolean>(false);
+  // const [isFetching, setFetch] = useState<boolean>(true);
+  const isFetching = false;
+  const isShowSidebar = false;
+  const session = await getServerSession(cookies());
+  // useEffect(() => {
+  //   const checkAuth = async () => {
+  //     const session = await getSession();
+  //     setSession(session);
+  //     setFetch(false);
+  //   };
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const session = await getSession();
-      setSession(session);
-      setFetch(false);
-    };
-
-    checkAuth();
-  }, []);
+  //   checkAuth();
+  // }, []);
 
   return (
     <div className="max-w-3xl xl:max-w-7xl px-4 m-auto min-h-screen">
       <SideBar
         isShow={isShowSidebar}
-        onClickShowSidebar={setShowSidebar}
+        // onClickShowSidebar={setShowSidebar}
         session={session}
         isFetching={isFetching}
       />
       <Topbar
-        onClickShowSidebar={setShowSidebar}
+        // onClickShowSidebar={setShowSidebar}
         session={session}
         isFetching={isFetching}
       />

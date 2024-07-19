@@ -1,9 +1,7 @@
-"use client";
-
 import Link from "next/link";
-import { useState } from "react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import configuration from "@/app/config/configuration";
 
 function HighlightCard({ post, className }: { post: any; className?: string }) {
   return (
@@ -13,8 +11,36 @@ function HighlightCard({ post, className }: { post: any; className?: string }) {
   );
 }
 
-export default function HighlightArea({ posts }: { posts: any[] }) {
-  const [isShowAll, setShowAll] = useState<boolean>(false);
+export default async function HighlightArea() {
+  let posts: any[] = [];
+
+  try {
+    const ret = await fetch(
+      `${configuration.APP.BACKEND_URL}/api/v1/post/feature?number=10`,
+      {
+        cache: "no-cache",
+        credentials: "include",
+      }
+    );
+
+    if (!ret.ok) {
+      throw new Error("Fetch failed");
+    }
+
+    const data = await ret.json();
+
+    if (!data.metadata) {
+      throw new Error("No data");
+    }
+
+    posts = data.metadata;
+  } catch (err) {
+    console.log(err);
+  } finally {
+    if (!posts.length) {
+      // return notFound();
+    }
+  }
 
   return (
     <>
@@ -29,10 +55,9 @@ export default function HighlightArea({ posts }: { posts: any[] }) {
             );
           }
         })}
+        <input type="checkbox" id="toggle" className="peer hidden" />
         <div
-          className={`flex flex-col transition-all gap-4 duration-200 ${
-            !isShowAll ? "max-h-0" : "max-h-[999px]"
-          } overflow-hidden`}
+          className={`flex flex-col transition-all gap-4 duration-200 max-h-0 peer-checked:max-h-[999px] overflow-hidden`}
         >
           {posts.map((post, index) => {
             if (index > 3) {
@@ -45,11 +70,10 @@ export default function HighlightArea({ posts }: { posts: any[] }) {
           })}
         </div>
       </div>
-      <Button
-        className="w-full rounded-full mt-4"
-        onClick={() => setShowAll((prev) => !prev)}
-      >
-        {!isShowAll ? "Show less" : "Show more"}
+      <Button asChild className="w-full rounded-full mt-4">
+        <label htmlFor="toggle" className="cursor-pointer">
+          <span className="peer-checked:hidden">Expand / Colapse</span>
+        </label>
       </Button>
     </>
   );

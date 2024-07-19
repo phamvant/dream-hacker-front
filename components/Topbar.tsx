@@ -12,7 +12,7 @@ export default function Topbar({
   session,
   isFetching,
 }: {
-  onClickShowSidebar: Dispatch<SetStateAction<boolean>>;
+  onClickShowSidebar?: Dispatch<SetStateAction<boolean>>;
   session: any;
   isFetching: boolean;
 }) {
@@ -22,7 +22,7 @@ export default function Topbar({
         <AlignJustify
           className="flex md:hidden"
           aria-label="Toggle navigation"
-          onClick={() => onClickShowSidebar((prevState) => !prevState)}
+          // onClick={() => onClickShowSidebar((prevState) => !prevState)}
         />
         <div className="flex-grow flex justify-center md:justify-start">
           <Link href="/">
