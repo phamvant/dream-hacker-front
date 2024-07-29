@@ -180,7 +180,7 @@ export default async function List({
   return (
     <div>
       <div className="flex items-center justify-center gap-10 pt-20 md:pt-0">
-        <img src="banner.png" className="w-2/5 dark:invert" />
+        <img src="banner.png" className="w-4/5 xl:w-2/5" />
       </div>
       <div className={cn(`grid grid-cols-3 gap-10 pt-10`)}>
         <div className="relative col-span-3 xl:col-span-2 rounded-lg">

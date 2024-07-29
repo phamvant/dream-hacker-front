@@ -2,6 +2,7 @@ import ProfileButton from "./ProfileButton";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ModeToggle";
+import Link from "next/link";
 
 export interface MenuItem {
   name: string;
@@ -25,22 +26,37 @@ export default function TopbarNavigator({
 }) {
   return (
     <nav>
-      <div className={cn(className, "items-center")}>
+      <div className={cn(className, "items-center gap-4 md:gap-10")}>
         <ModeToggle />
         {menuItems.map((item) => {
           if (!item.role || item.role === session.role) {
             return (
               <div
                 key={item.href}
-                className="ml-4 md:ml-8 text-blue-700/80 dark:text-blue-500"
+                className="text-blue-700/80 dark:text-blue-500 relative group mx-auto"
               >
-                <a
-                  href={item.href}
-                  target={item.openInNewTab ? "_blank" : "_self"}
-                  className={cn("hover:text-gray-900")}
-                >
-                  {item.name}
-                </a>
+                <div>
+                  <a
+                    href={item.href}
+                    target={item.openInNewTab ? "_blank" : "_self"}
+                    className={cn("hover:text-gray-900")}
+                  >
+                    {item.name}
+                  </a>
+                  <div className="absolute right-0 hidden group-hover:block w-96 pt-8">
+                    <div className="grid grid-cols-2 border-2 gap-4 p-4 transition-opacity rounded-xl bg-primary-foreground">
+                      <Link href={"#"}>Essay Writing</Link>
+                      <Link href={"#"}>MBA Rankings</Link>
+                      <Link href={"#"}>MBA Interviews</Link>
+                      <Link href={"#"}>School Information</Link>
+                      <Link href={"#"}>Resume</Link>
+                      <Link href={"#"}>Letter</Link>
+                      <Link href={"#"}>Application FAQ</Link>
+                      <Link href={"#"}>Application Summary</Link>
+                      <Link href={"#"}>Application Strategy</Link>
+                    </div>
+                  </div>
+                </div>
               </div>
             );
           }
@@ -50,7 +66,7 @@ export default function TopbarNavigator({
             <ProfileButton session={session} />
           </div>
         ) : (
-          <Button className="rounded-full ml-4 md:ml-8" variant={"default"}>
+          <Button className="rounded-full" variant={"default"}>
             <a href="/login">Login</a>
           </Button>
         )}
