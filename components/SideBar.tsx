@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 import { ChevronsLeft } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
-import { menuItems, MenuItem } from "./TopbarNavigator";
 import { ModeToggle } from "./ModeToggle";
+import { MenuItem, menuItems } from "@/app/(main)/list/category";
 
 export default function SideBar({
   className,

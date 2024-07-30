@@ -3,19 +3,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ModeToggle";
 import Link from "next/link";
-
-export interface MenuItem {
-  name: string;
-  href: string;
-  role?: string;
-  openInNewTab?: boolean;
-}
-
-export const menuItems: MenuItem[] = [
-  { name: "MBA", href: "/list?category=1&page=1" },
-  { name: "PhD", href: "/list?category=2&page=1" },
-  { name: "Editor", href: "/editor", role: "ADMIN" },
-];
+import { menuItems } from "@/app/(main)/list/category";
 
 export default function TopbarNavigator({
   session,
@@ -43,26 +31,28 @@ export default function TopbarNavigator({
                   >
                     {item.name}
                   </a>
-                  <div className="absolute right-0 hidden group-hover:block w-96 pt-8">
-                    <div className="grid grid-cols-2 border-2 gap-4 p-4 transition-opacity rounded-xl bg-primary-foreground">
-                      <Link href={"#"}>Essay Writing</Link>
-                      <Link href={"#"}>MBA Rankings</Link>
-                      <Link href={"#"}>MBA Interviews</Link>
-                      <Link href={"#"}>School Information</Link>
-                      <Link href={"#"}>Resume</Link>
-                      <Link href={"#"}>Letter</Link>
-                      <Link href={"#"}>Application FAQ</Link>
-                      <Link href={"#"}>Application Summary</Link>
-                      <Link href={"#"}>Application Strategy</Link>
+                  {item.sub ? (
+                    <div className="absolute right-0 hidden group-hover:block w-96 pt-8">
+                      <div className="grid grid-cols-2 border-2 gap-4 p-4 transition-opacity rounded-xl bg-primary-foreground">
+                        {item.sub?.map((cate) => (
+                          <Link
+                            key={cate.id}
+                            href={`list?category=${cate.id}&page=1`}
+                            className="hover:text-slate-900 hover:dark:text-slate-100"
+                          >
+                            {cate.name}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
                 </div>
               </div>
             );
           }
         })}
         {session ? (
-          <div className="ml-4 md:ml-8">
+          <div className="">
             <ProfileButton session={session} />
           </div>
         ) : (

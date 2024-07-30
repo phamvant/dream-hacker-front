@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import ProfileButton from "./ProfileButton";
-import { StateButton } from "./StateButton";
 
 interface Props {
   session: any;

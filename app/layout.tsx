@@ -31,6 +31,11 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <NextTopLoader />
           {children}
+          <div className="h-32 w-full border-[1px] mt-20 flex flex-col justify-center">
+            <div className="max-w-3xl xl:max-w-7xl px-4 m-auto">
+              <p>An T&T's product</p>
+            </div>
+          </div>
         </ThemeProvider>
       </body>
     </html>

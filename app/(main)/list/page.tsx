@@ -16,6 +16,56 @@ import HighlightArea from "@/components/HighlightArea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { SlashIcon } from "lucide-react";
+import Link from "next/link";
+
+function BreadcrumbWithDropdown({
+  className,
+  categoryInfo,
+  currentCategory,
+}: {
+  className?: string;
+  categoryInfo: any;
+  currentCategory: number;
+}) {
+  return (
+    <Breadcrumb
+      className={`${className} border-[1px] rounded-xl w-fit p-2 px-4`}
+    >
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator>
+          <SlashIcon />
+        </BreadcrumbSeparator>
+        <BreadcrumbItem>
+          <Link
+            href={`list?category=${currentCategory}&page=1`}
+            className="hover:text-slate-900"
+          >
+            {categoryInfo.programName}
+          </Link>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator>
+          <SlashIcon />
+        </BreadcrumbSeparator>
+        <BreadcrumbItem>
+          <BreadcrumbPage>{categoryInfo.categoryName}</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+}
+
 function ListPagePaging({
   className,
   currentPage,
@@ -145,14 +195,15 @@ export default async function List({
     notFound();
   }
 
-  let totalPage: number = 0;
+  let categoryInfo: any = {};
 
   let posts: any[] = [{}];
   try {
     const ret = await fetch(
-      `${configuration.APP.BACKEND_URL}/api/v1/post?category=${searchParams.category}&page=${searchParams.page}`,
+      `${configuration.APP.BACKEND_URL}/api/v1/category?id=${searchParams.category}&page=${searchParams.page}`,
       {
         credentials: "include",
+        cache: "no-cache",
         headers: { Cookie: cookies().toString() },
       }
     );
@@ -167,7 +218,9 @@ export default async function List({
       throw new Error("No data");
     }
 
-    totalPage = data.metadata.totalPage;
+    console.log(data.metadata.categoryInfo);
+
+    categoryInfo = data.metadata.categoryInfo;
     posts = data.metadata.posts;
   } catch (err) {
     console.log(err);
@@ -179,11 +232,16 @@ export default async function List({
 
   return (
     <div>
-      <div className="flex items-center justify-center gap-10 pt-20 md:pt-0">
-        <img src="banner.png" className="w-4/5 xl:w-2/5" />
+      <div className="flex items-center justify-center gap-10 pt-20 md:pt-0 -z-50">
+        <img src="banner.png" className="w-4/5 xl:w-2/5 dark:invert -z-50" />
       </div>
       <div className={cn(`grid grid-cols-3 gap-10 pt-10`)}>
         <div className="relative col-span-3 xl:col-span-2 rounded-lg">
+          <BreadcrumbWithDropdown
+            className="mb-4 md:mb-10"
+            categoryInfo={categoryInfo}
+            currentCategory={Number(searchParams.category)}
+          />
           <Suspense
             fallback={
               <div className="flex flex-col gap-10">
@@ -203,7 +261,7 @@ export default async function List({
             className="mt-10"
             currentPage={Number(searchParams.page)}
             currentCategory={Number(searchParams.category)}
-            totalPage={totalPage}
+            totalPage={categoryInfo.totalPage}
           />
         </div>
         <div className="relative hidden xl:block md:col-span-1">

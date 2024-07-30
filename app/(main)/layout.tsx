@@ -12,7 +12,6 @@ export default async function Layout({
     <div className="max-w-3xl xl:max-w-7xl px-4 m-auto min-h-screen">
       <NavigationBar session={session} />
       {children}
-      <div className="h-52 w-full"></div>
     </div>
   );
 }
