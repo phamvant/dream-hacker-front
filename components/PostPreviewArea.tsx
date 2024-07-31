@@ -1,10 +1,6 @@
 import { Post } from "@/app/page";
 import Link from "next/link";
 import { BookMarked, MessagesSquare, ThumbsUp } from "lucide-react";
-import configuration from "@/app/config/configuration";
-import { cookies } from "next/headers";
-
-import { notFound } from "next/navigation";
 
 function PostPreviewCard({ post }: { post: Post }) {
   return (

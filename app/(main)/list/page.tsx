@@ -197,7 +197,7 @@ export default async function List({
 
   let categoryInfo: any = {};
 
-  let posts: any[] = [{}];
+  let posts: any[] = [];
   try {
     const ret = await fetch(
       `${configuration.APP.BACKEND_URL}/api/v1/category?id=${searchParams.category}&page=${searchParams.page}`,
@@ -225,6 +225,7 @@ export default async function List({
   } catch (err) {
     console.log(err);
   } finally {
+    console.log(posts.length);
     if (!posts.length) {
       return notFound();
     }

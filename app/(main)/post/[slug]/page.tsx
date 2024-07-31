@@ -3,8 +3,15 @@ import { redirect } from "next/navigation";
 import remarkGfm from "remark-gfm";
 import Markdown from "react-markdown";
 import { Button } from "@/components/ui/button";
+import { getServerSession } from "@/lib/auth/auth";
+import { cookies } from "next/headers";
+import { Pencil } from "lucide-react";
+import PostEditor from "@/components/PostEditor";
 
 export default async function Blog({ params }: { params: any }) {
+  const session = await getServerSession(cookies());
+  console.log(session);
+
   let data;
 
   try {
@@ -54,6 +61,10 @@ export default async function Blog({ params }: { params: any }) {
             <p className="text-sm">
               {(data.created_at as string).split("T")[0].replaceAll("-", "/")}
             </p>
+            {session.role === "ADMIN" ||
+            (session.role === "MODDER" && session.id === data.author_id) ? (
+              <PostEditor />
+            ) : null}
           </div>
         </div>
         <article className="prose dark:prose-invert mt-20">
