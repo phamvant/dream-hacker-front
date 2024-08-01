@@ -82,5 +82,5 @@ export const menuItems: MenuItem[] = [
       },
     ],
   },
-  { name: "Editor", href: "/editor", role: "ADMIN" },
+  { name: "Editor", href: "/editor/new", role: "ADMIN" },
 ];

@@ -1,6 +1,16 @@
-import { Post } from "@/app/page";
 import Link from "next/link";
 import { BookMarked, MessagesSquare, ThumbsUp } from "lucide-react";
+
+export interface Post {
+  id: string;
+  title: string;
+  likes: number;
+  total_comments: number;
+  saved: number;
+  username: string;
+  avatar: string;
+  created_at: string;
+}
 
 function PostPreviewCard({ post }: { post: Post }) {
   return (
