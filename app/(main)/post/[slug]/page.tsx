@@ -5,12 +5,11 @@ import Markdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { getServerSession } from "@/lib/auth/auth";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { Pencil } from "lucide-react";
-import PostEditor from "@/components/PostEditor";
 
 export default async function Blog({ params }: { params: any }) {
   const session = await getServerSession(cookies());
-  console.log(session);
 
   let data;
 
@@ -63,7 +62,9 @@ export default async function Blog({ params }: { params: any }) {
             </p>
             {session.role === "ADMIN" ||
             (session.role === "MODDER" && session.id === data.author_id) ? (
-              <PostEditor />
+              <Link href={`/editor/${params.slug}`}>
+                <Pencil size={20} />
+              </Link>
             ) : null}
           </div>
         </div>

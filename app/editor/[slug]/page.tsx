@@ -1,14 +1,15 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { z } from "zod";
-import configuration from "../config/configuration";
+import configuration from "../../config/configuration";
 import { useCreateBlockNote } from "@blocknote/react";
 import { useTheme } from "next-themes";
-import { Block } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import { StateButton } from "@/components/StateButton";
+import { redirect } from "next/navigation";
+import { Block } from "@blocknote/core";
 
 const submitPostSchema = z.object({
   title: z.string().min(20, {
@@ -63,10 +64,57 @@ const publishPost = async ({
   setTimeout(() => publish(), 2000);
   const publish = async () => {
     try {
+      const ret = await fetch(`${configuration.APP.BACKEND_URL}/admin/post`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          title: title,
+          content: markdown,
+        }),
+      });
+      if (!ret.ok) {
+        throw new Error();
+      } else {
+        setStatus("done");
+      }
+    } catch (error) {
+      setStatus("error");
+    }
+  };
+};
+
+const modifyPost = async ({
+  postId,
+  editor,
+  setStatus,
+}: {
+  postId: string;
+  editor: any;
+  setStatus: Dispatch<SetStateAction<"idle" | "fetching" | "error" | "done">>;
+}) => {
+  const { title, markdown } = await convertPost({ editor: editor });
+
+  const isValid = validate({
+    title: title,
+    content: markdown,
+  });
+
+  if (!isValid) {
+    return false;
+  }
+
+  setStatus("fetching");
+  setTimeout(() => publish(), 2000);
+
+  const publish = async () => {
+    try {
       const ret = await fetch(
-        `${configuration.APP.BACKEND_URL}/admin/post/create`,
+        `${configuration.APP.BACKEND_URL}/admin/post/${postId}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
@@ -88,19 +136,49 @@ const publishPost = async ({
   };
 };
 
-export default function EditorPage() {
+export default function EditorPage({ params }: { params: any }) {
+  const editor = useCreateBlockNote({
+    initialContent:
+      params.slug === "new"
+        ? localStorage.getItem("documentData") !== "[]"
+          ? (JSON.parse(localStorage.getItem("documentData")!) as Block[])
+          : [{}]
+        : [{}],
+  });
+
+  useEffect(() => {
+    async function loadInitialHTML() {
+      let initialMarkdown;
+      try {
+        const response = await fetch(
+          `${configuration.APP.BACKEND_URL}/api/v1/post/${params.slug}`,
+          {
+            cache: "no-cache",
+          }
+        );
+
+        if (!response.ok) {
+          redirect("/");
+        }
+
+        const body = await response.json();
+        initialMarkdown = body.metadata.content;
+      } catch (e) {
+        redirect("/");
+      }
+
+      const blocks = await editor.tryParseMarkdownToBlocks(initialMarkdown);
+      editor.replaceBlocks(editor.document, blocks);
+    }
+
+    params.slug !== "new" ? loadInitialHTML() : null;
+  }, [editor]);
+
   const { theme } = useTheme();
 
   const [publishStatus, setPublicStatus] = useState<
     "idle" | "fetching" | "error" | "done"
   >("idle");
-
-  const editor = useCreateBlockNote({
-    initialContent:
-      localStorage.getItem("documentData") !== "[]"
-        ? (JSON.parse(localStorage.getItem("documentData")!) as Block[])
-        : [],
-  });
 
   return (
     <div className="flex gap-2">
@@ -113,29 +191,37 @@ export default function EditorPage() {
       </div>
       <StateButton
         onClick={() =>
-          publishPost({
-            editor: editor,
-            setStatus: setPublicStatus,
-          })
+          params.slug === "new"
+            ? publishPost({
+                editor: editor,
+                setStatus: setPublicStatus,
+              })
+            : modifyPost({
+                editor: editor,
+                setStatus: setPublicStatus,
+                postId: params.slug,
+              })
         }
         status={publishStatus}
         state={{
           done: "Published",
           error: "Error",
           fetching: "Publishing",
-          idle: "Publish",
+          idle: params.slug === "new" ? "Publish" : "Modify",
         }}
-        className="fixed right-40 bottom-20 rounded-full size-20"
+        className="fixed right-40 bottom-20 rounded-full size-20 z-50"
       />
       <div className="xl:border min-h-screen p-6 pt-10 rounded-xl w-full">
         <BlockNoteView
           color="red"
           theme={theme as "dark" | "light"}
           onChange={() => {
-            localStorage.setItem(
-              "documentData",
-              JSON.stringify(editor.document)
-            );
+            params.slug === "new"
+              ? localStorage.setItem(
+                  "documentData",
+                  JSON.stringify(editor.document)
+                )
+              : null;
           }}
           editor={editor}
           data-theming-css-variables-demo
