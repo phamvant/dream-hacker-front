@@ -63,7 +63,7 @@ export default async function Blog({ params }: { params: any }) {
             {session.role === "ADMIN" ||
             (session.role === "MODDER" && session.id === data.author_id) ? (
               <Link href={`/editor/${params.slug}`}>
-                <Pencil size={20} />
+                <Pencil size={30} className="p-1 border-2 rounded-xl" />
               </Link>
             ) : null}
           </div>
