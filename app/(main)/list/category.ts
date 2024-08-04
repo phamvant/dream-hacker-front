@@ -17,68 +17,63 @@ export const menuItems: MenuItem[] = [
     href: "/list?category=1&page=1",
     sub: [
       {
-        name: "Essay Writing",
-        id: 2,
-      },
-      {
-        name: "MBA Rankings",
-        id: 3,
-      },
-      {
-        name: "MBA Interviews",
-        id: 4,
-      },
-      {
         name: "School Information",
-        id: 5,
-      },
-      {
-        name: "Resume",
-        id: 6,
-      },
-      {
-        name: "Recommendation Letter",
-        id: 7,
-      },
-      {
-        name: "Application FAQ",
-        id: 8,
-      },
-      {
-        name: "Application Summary",
-        id: 9,
-      },
-      {
-        name: "Application Strategy",
-        id: 10,
-      },
-    ],
-  },
-  {
-    name: "PhD",
-    href: "/list?category=11&page=1",
-    sub: [
-      {
-        name: "PhD",
         id: 11,
       },
       {
-        name: "Essay Writing",
+        name: "MBA Rankings",
         id: 12,
+      },
+      {
+        name: "Application FAQ",
+        id: 13,
+      },
+      {
+        name: "Application Strategy",
+        id: 14,
+      },
+      {
+        name: "Resume",
+        id: 15,
+      },
+      {
+        name: "Recommendation Letter",
+        id: 16,
+      },
+      {
+        name: "Essay Writing",
+        id: 17,
+      },
+      {
+        name: "MBA Interview",
+        id: 18,
+      },
+      {
+        name: "Application Summary",
+        id: 19,
       },
     ],
   },
+
   {
     name: "Master",
     href: "/list?category=2&page=1",
     sub: [
       {
-        name: "Master",
-        id: 13,
+        name: "School Introduction",
+        id: 20,
       },
       {
-        name: "Essay Writing",
-        id: 14,
+        name: "Major and Ranking",
+        id: 21,
+      },
+      {
+        name: "Application FAQ",
+        id: 22,
+      },
+      {
+        name: "Application Summary",
+        id: 26,
       },
     ],
   },

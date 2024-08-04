@@ -7,6 +7,8 @@ import { getServerSession } from "@/lib/auth/auth";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
+import Comment from "@/components/Comment";
+import CommentCreator from "@/components/CommentCreator";
 
 export default async function Blog({ params }: { params: any }) {
   const session = await getServerSession(cookies());
@@ -33,12 +35,12 @@ export default async function Blog({ params }: { params: any }) {
 
   return (
     <section className="px-2 md:px-10 pb-10 break-words w-fit m-auto mt-24">
-      <div className="xl:w-[1000px]">
+      <div className="xl:w-[1000px] mb-20">
         <h1
           className="leading-relaxed mt-6 px-4 text-center font-heading text-3xl
         font-bold text-slate-900 dark:text-white md:mt-10 md:px-5 md:text-4xl md:leading-relaxed lg:px-8 xl:px-20 xl:text-5xl xl:leading-normal mb-5"
         >
-          {data.title}
+          {data.title_vn}
         </h1>
         <div className="flex gap-4 pb-6 justify-center mb-4">
           <div className="flex items-center gap-4">
@@ -68,12 +70,74 @@ export default async function Blog({ params }: { params: any }) {
             ) : null}
           </div>
         </div>
-        <article className="prose dark:prose-invert mt-20">
-          <Markdown remarkPlugins={[remarkGfm]} className="block xl:w-[1000px]">
-            {data.content}
-          </Markdown>
-        </article>
+        <ContentArea data={data} />
+      </div>
+
+      <div>
+        <CommentCreator />
+        <Comment postId={params.slug} />
       </div>
     </section>
   );
 }
+
+const ContentArea = ({ data }: { data: any }) => {
+  return (
+    <>
+      <input
+        id="content_vn"
+        className="peer/content_vn hidden"
+        type="radio"
+        name="status"
+        defaultChecked
+      />
+      <input
+        id="content_en"
+        className="peer/content_en hidden"
+        type="radio"
+        name="status"
+      />
+      <input
+        id="content_cn"
+        className="peer/content_cn hidden"
+        type="radio"
+        name="status"
+      />
+
+      <label
+        htmlFor="content_vn"
+        className="peer-checked/content_vn:bg-primary peer-checked/content_vn:text-white p-1 rounded-md mr-2"
+      >
+        VN
+      </label>
+      <label
+        htmlFor="content_en"
+        className="peer-checked/content_en:bg-primary peer-checked/content_en:text-white p-1 rounded-md mr-2"
+      >
+        EN
+      </label>
+      <label
+        htmlFor="content_cn"
+        className="peer-checked/content_cn:bg-primary peer-checked/content_cn:text-white p-1 rounded-md mr-2"
+      >
+        CN
+      </label>
+
+      <article className="hidden peer-checked/content_vn:block prose dark:prose-invert mt-20">
+        <Markdown remarkPlugins={[remarkGfm]} className="xl:w-[1000px]">
+          {data.content_vn}
+        </Markdown>
+      </article>
+      <article className="hidden peer-checked/content_en:block prose dark:prose-invert mt-20">
+        <Markdown remarkPlugins={[remarkGfm]} className="xl:w-[1000px]">
+          {data.content_en}
+        </Markdown>
+      </article>
+      <article className="hidden peer-checked/content_cn:block prose dark:prose-invert mt-20">
+        <Markdown remarkPlugins={[remarkGfm]} className="xl:w-[1000px]">
+          {data.content_cn}
+        </Markdown>
+      </article>
+    </>
+  );
+};

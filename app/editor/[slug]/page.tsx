@@ -10,6 +10,7 @@ import "@blocknote/mantine/style.css";
 import { StateButton } from "@/components/StateButton";
 import { redirect } from "next/navigation";
 import { Block } from "@blocknote/core";
+import { Button } from "@/components/ui/button";
 
 const submitPostSchema = z.object({
   title: z.string().min(20, {
@@ -88,10 +89,12 @@ const publishPost = async ({
 
 const modifyPost = async ({
   postId,
+  lang,
   editor,
   setStatus,
 }: {
   postId: string;
+  lang: string;
   editor: any;
   setStatus: Dispatch<SetStateAction<"idle" | "fetching" | "error" | "done">>;
 }) => {
@@ -122,6 +125,7 @@ const modifyPost = async ({
           body: JSON.stringify({
             title: title,
             content: markdown,
+            lang: lang,
           }),
         }
       );
@@ -137,6 +141,9 @@ const modifyPost = async ({
 };
 
 export default function EditorPage({ params }: { params: any }) {
+  const [lang, setLang] = useState<string>("vn");
+  const [data, setData] = useState<Record<string, Block[]>>();
+
   const editor = useCreateBlockNote({
     initialContent:
       params.slug === "new"
@@ -148,7 +155,6 @@ export default function EditorPage({ params }: { params: any }) {
 
   useEffect(() => {
     async function loadInitialHTML() {
-      let initialMarkdown;
       try {
         const response = await fetch(
           `${configuration.APP.BACKEND_URL}/api/v1/post/${params.slug}`,
@@ -162,13 +168,21 @@ export default function EditorPage({ params }: { params: any }) {
         }
 
         const body = await response.json();
-        initialMarkdown = body.metadata.content;
+        const blockvn = await editor.tryParseMarkdownToBlocks(
+          body.metadata.content_vn
+        );
+        const blocken = await editor.tryParseMarkdownToBlocks(
+          body.metadata.content_en
+        );
+        const blockcn = await editor.tryParseMarkdownToBlocks(
+          body.metadata.content_cn
+        );
+        setData({ vn: blockvn, en: blocken, cn: blockcn });
+
+        editor.replaceBlocks(editor.document, blockvn);
       } catch (e) {
         redirect("/");
       }
-
-      const blocks = await editor.tryParseMarkdownToBlocks(initialMarkdown);
-      editor.replaceBlocks(editor.document, blocks);
     }
 
     params.slug !== "new" ? loadInitialHTML() : null;
@@ -179,6 +193,31 @@ export default function EditorPage({ params }: { params: any }) {
   const [publishStatus, setPublicStatus] = useState<
     "idle" | "fetching" | "error" | "done"
   >("idle");
+
+  useEffect(() => {
+    async function switchLang(lang: string) {
+      if (data) {
+        editor.replaceBlocks(editor.document, data[lang]);
+      }
+    }
+
+    switchLang(lang);
+  }, [lang]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: any) => {
+      const message =
+        "You have unsaved changes. Are you sure you want to leave?";
+      event.preventDefault();
+      event.returnValue = message; // Standard for most browsers
+      return message; // For older browsers
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <div className="flex gap-2">
@@ -200,6 +239,7 @@ export default function EditorPage({ params }: { params: any }) {
                 editor: editor,
                 setStatus: setPublicStatus,
                 postId: params.slug,
+                lang: lang,
               })
         }
         status={publishStatus}
@@ -211,7 +251,39 @@ export default function EditorPage({ params }: { params: any }) {
         }}
         className="fixed right-40 bottom-20 rounded-full size-20 z-50"
       />
-      <div className="xl:border min-h-screen p-6 pt-10 rounded-xl w-full">
+      <div className="xl:border min-h-screen p-6 rounded-xl w-full">
+        <div className="flex gap-4">
+          <Button
+            className={`${
+              lang === "vn"
+                ? "bg-primary text-white"
+                : "bg-primary-foreground text-primary hover:text-white"
+            }`}
+            onClick={() => setLang("vn")}
+          >
+            VN
+          </Button>
+          <Button
+            className={`${
+              lang === "en"
+                ? "bg-primary text-white"
+                : "bg-primary-foreground text-primary hover:text-white"
+            }`}
+            onClick={() => setLang("en")}
+          >
+            EN
+          </Button>
+          <Button
+            className={`${
+              lang === "cn"
+                ? "bg-primary text-white"
+                : "bg-primary-foreground text-primary hover:text-white"
+            }`}
+            onClick={() => setLang("cn")}
+          >
+            CN
+          </Button>
+        </div>
         <BlockNoteView
           color="red"
           theme={theme as "dark" | "light"}
@@ -221,7 +293,9 @@ export default function EditorPage({ params }: { params: any }) {
                   "documentData",
                   JSON.stringify(editor.document)
                 )
-              : null;
+              : setData((prev) => {
+                  return { ...prev, [lang]: editor.document };
+                });
           }}
           editor={editor}
           data-theming-css-variables-demo

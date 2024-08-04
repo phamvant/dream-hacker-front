@@ -218,16 +218,12 @@ export default async function List({
       throw new Error("No data");
     }
 
-    console.log(data.metadata.categoryInfo);
-
     categoryInfo = data.metadata.categoryInfo;
     posts = data.metadata.posts;
   } catch (err) {
-    console.log(err);
   } finally {
-    console.log(posts.length);
     if (!posts.length) {
-      return notFound();
+      redirect("/list?category=11&page=1");
     }
   }
 

@@ -2,6 +2,13 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import configuration from "@/app/config/configuration";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { ListFilter } from "lucide-react";
 
 function HighlightCard({ post, className }: { post: any; className?: string }) {
   return (
@@ -35,7 +42,6 @@ export default async function HighlightArea() {
 
     posts = data.metadata;
   } catch (err) {
-    console.log(err);
   } finally {
     if (!posts.length) {
       // return notFound();
@@ -44,7 +50,26 @@ export default async function HighlightArea() {
 
   return (
     <>
-      <p className="text-2xl font-bold mb-5">Feature</p>
+      <div className="flex justify-between">
+        <p className="text-2xl font-bold mb-5">Feature</p>
+        <p className="text-2xl font-bold mb-5">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="h-7 gap-1 text-sm">
+                <ListFilter className="h-3.5 w-3.5" />
+                <span className="sr-only sm:not-sr-only">Filter</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuCheckboxItem defaultChecked>
+                Week
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem>Month</DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem>Year</DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </p>
+      </div>
       <div className={`flex flex-col gap-4`}>
         {posts.map((post, index) => {
           if (index < 4) {

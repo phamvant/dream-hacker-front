@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   if (url.pathname === "/") {
     url.pathname = "/list";
-    url.search = "?category=1&page=1";
+    url.search = "?category=11&page=1";
     return NextResponse.redirect(url);
   }
 }
