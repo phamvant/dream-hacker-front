@@ -202,7 +202,6 @@ export default async function List({
     const ret = await fetch(
       `${configuration.APP.BACKEND_URL}/api/v1/category?id=${searchParams.category}&page=${searchParams.page}`,
       {
-        credentials: "include",
         cache: "no-cache",
         headers: { Cookie: cookies().toString() },
       }

@@ -89,7 +89,7 @@ export default async function Comments({ postId }: { postId: number }) {
       {comments.length ? (
         renderComments(comments)
       ) : (
-        <div className="flex justify-center text-xl">No comment</div>
+        <div className="flex justify-center text-xl mt-6">No comment</div>
       )}
     </div>
   );

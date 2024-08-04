@@ -74,8 +74,13 @@ export default async function Blog({ params }: { params: any }) {
       </div>
 
       <div>
-        <CommentCreator />
-        <Comment postId={params.slug} />
+        <div>
+          <p className="font-bold text-2xl mb-4">Comments</p>
+          <CommentCreator session={session} postId={params.slug} />
+        </div>
+        <div className="mt-10">
+          <Comment postId={params.slug} />
+        </div>
       </div>
     </section>
   );
