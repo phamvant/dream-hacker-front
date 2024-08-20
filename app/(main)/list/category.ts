@@ -72,6 +72,10 @@ export const menuItems: MenuItem[] = [
         id: 22,
       },
       {
+        name: "Business Interview",
+        id: 25,
+      },
+      {
         name: "Application Summary",
         id: 26,
       },
