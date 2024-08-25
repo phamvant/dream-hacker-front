@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    domains: ['picsum.photos'],
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/list?category=11&page=1",
+        permanent: true, // triggers 308
+      },
+    ];
   },
 };
 
