@@ -231,7 +231,7 @@ export default async function List({
   } catch (err) {
   } finally {
     if (!posts.length) {
-      redirect("/list?category=11&page=1");
+      return notFound();
     }
   }
 

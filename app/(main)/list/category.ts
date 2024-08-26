@@ -14,7 +14,7 @@ export interface MenuItem {
 export const menuItems: MenuItem[] = [
   {
     name: "MBA",
-    href: "/list?category=1&page=1",
+    href: "/list?category=11&page=1",
     sub: [
       {
         name: "School Information",
@@ -57,7 +57,7 @@ export const menuItems: MenuItem[] = [
 
   {
     name: "Master",
-    href: "/list?category=2&page=1",
+    href: "/list?category=20&page=1",
     sub: [
       {
         name: "School Introduction",

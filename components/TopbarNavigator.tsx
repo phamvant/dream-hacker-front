@@ -27,9 +27,10 @@ export default function TopbarNavigator({
                   <a
                     href={item.href}
                     target={item.openInNewTab ? "_blank" : "_self"}
-                    className={cn("hover:text-gray-900")}
                   >
-                    {item.name}
+                    <p className="hover:scale-110 transition-all">
+                      {item.name}
+                    </p>
                   </a>
                   {item.sub ? (
                     <div className="absolute right-0 hidden group-hover:block w-96 pt-8">
@@ -38,7 +39,7 @@ export default function TopbarNavigator({
                           <Link
                             key={cate.id}
                             href={`list?category=${cate.id}&page=1`}
-                            className="hover:text-slate-900 hover:dark:text-slate-100"
+                            className="hover:text-slate-700 hover:dark:text-slate-100 hover:scale-105 transition-all"
                           >
                             {cate.name}
                           </Link>

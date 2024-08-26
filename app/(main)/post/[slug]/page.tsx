@@ -9,17 +9,21 @@ import Link from "next/link";
 import { Pencil } from "lucide-react";
 import Comment from "@/components/Comment";
 import CommentCreator from "@/components/CommentCreator";
+import ToggleEdited from "@/components/ToggleEdited";
 
 export default async function Blog({ params }: { params: any }) {
   const session = await getServerSession(cookies());
-
   let data;
 
   try {
     const response = await fetch(
-      `${configuration.APP.BACKEND_URL}/api/v1/post/${params.slug}`,
+      `${configuration.APP.BACKEND_URL}/${
+        session && session.role === "ADMIN" ? "admin" : "api/v1"
+      }/post/${params.slug}`,
       {
+        credentials: "include",
         cache: "no-cache",
+        headers: { Cookie: cookies().toString() },
       }
     );
 
@@ -66,9 +70,18 @@ export default async function Blog({ params }: { params: any }) {
               (session.role === "ADMIN" ||
               (session.role === "MODDER" && session.id === data.author_id) ? (
                 <Link href={`/editor/${params.slug}`}>
-                  <Pencil size={30} className="p-1 border-2 rounded-xl" />
+                  <Pencil
+                    size={30}
+                    className="p-1 border-2 rounded-xl transition-all hover:scale-110"
+                  />
                 </Link>
               ) : null)}
+            {session && session.role === "ADMIN" && (
+              <ToggleEdited
+                postId={Number(params.slug)}
+                is_edited={data.is_edited}
+              />
+            )}
           </div>
         </div>
         <ContentArea data={data} />

@@ -64,7 +64,7 @@ function PostPreviewCard({ post, isAdmin }: { post: IPost; isAdmin: boolean }) {
       <div className="flex justify-between">
         <div className="flex gap-8">
           <div
-            className="z-20 flex items-center gap-4 cursor-pointer"
+            className="z-20 flex items-center gap-4 cursor-pointer hover:scale-110 transition-all"
             onClick={() => vote()}
           >
             <ThumbsUp
@@ -77,7 +77,7 @@ function PostPreviewCard({ post, isAdmin }: { post: IPost; isAdmin: boolean }) {
             <p className="text-sm">{likes}</p>
           </div>
           <Link
-            className="flex items-center gap-4"
+            className="flex items-center gap-4 hover:scale-110 transition-all"
             href={`/post/${post.id}`}
             prefetch={false}
           >
@@ -88,7 +88,7 @@ function PostPreviewCard({ post, isAdmin }: { post: IPost; isAdmin: boolean }) {
             />
             <p className="text-sm">{post.total_comments}</p>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 hover:scale-110 transition-all cursor-pointer">
             <BookMarked
               strokeWidth={1}
               size={20}
@@ -96,7 +96,11 @@ function PostPreviewCard({ post, isAdmin }: { post: IPost; isAdmin: boolean }) {
             />
             <p className="text-sm">{post.saved}</p>
           </div>
-          {isAdmin ? post.is_edited ? <CheckIcon /> : <SmileIcon /> : ""}
+          {isAdmin && post.is_edited ? (
+            <CheckIcon className="text-green-700" />
+          ) : (
+            ""
+          )}
         </div>
         <div className="hidden lg:flex items-center gap-4">
           <p className="text-sm">{post.username}</p>
