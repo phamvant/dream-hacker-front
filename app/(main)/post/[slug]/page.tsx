@@ -62,12 +62,13 @@ export default async function Blog({ params }: { params: any }) {
             <p className="text-sm">
               {(data.created_at as string).split("T")[0].replaceAll("-", "/")}
             </p>
-            {session.role === "ADMIN" ||
-            (session.role === "MODDER" && session.id === data.author_id) ? (
-              <Link href={`/editor/${params.slug}`}>
-                <Pencil size={30} className="p-1 border-2 rounded-xl" />
-              </Link>
-            ) : null}
+            {session &&
+              (session.role === "ADMIN" ||
+              (session.role === "MODDER" && session.id === data.author_id) ? (
+                <Link href={`/editor/${params.slug}`}>
+                  <Pencil size={30} className="p-1 border-2 rounded-xl" />
+                </Link>
+              ) : null)}
           </div>
         </div>
         <ContentArea data={data} />

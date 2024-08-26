@@ -9,7 +9,7 @@ export default async function Layout({
 }: Readonly<{ children: ReactNode }>) {
   const session = await getServerSession(cookies());
 
-  if (!["ADMIN", "MODDER"].includes(session.role)) {
+  if (session && !["ADMIN", "MODDER"].includes(session.role)) {
     redirect("/");
   }
 

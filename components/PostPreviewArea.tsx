@@ -1,11 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { BookMarked, MessagesSquare, ThumbsUp } from "lucide-react";
+import {
+  BookMarked,
+  CheckIcon,
+  MessagesSquare,
+  SmileIcon,
+  ThumbsUp,
+} from "lucide-react";
 import configuration from "@/app/config/configuration";
 import { useState } from "react";
 
-export interface Post {
+export interface IPost {
   id: string;
   title?: string;
   content?: string;
@@ -16,9 +22,10 @@ export interface Post {
   avatar: string;
   created_at: string;
   is_liked?: boolean;
+  is_edited?: boolean;
 }
 
-function PostPreviewCard({ post }: { post: Post }) {
+function PostPreviewCard({ post, isAdmin }: { post: IPost; isAdmin: boolean }) {
   const [isLiked, setLiked] = useState<boolean>(post.is_liked ?? false);
   const [likes, setLikes] = useState<number>(post.likes);
 
@@ -89,6 +96,7 @@ function PostPreviewCard({ post }: { post: Post }) {
             />
             <p className="text-sm">{post.saved}</p>
           </div>
+          {isAdmin ? post.is_edited ? <CheckIcon /> : <SmileIcon /> : ""}
         </div>
         <div className="hidden lg:flex items-center gap-4">
           <p className="text-sm">{post.username}</p>
@@ -102,11 +110,17 @@ function PostPreviewCard({ post }: { post: Post }) {
   );
 }
 
-export default async function PostPreviewArea({ posts }: { posts: any[] }) {
+export default async function PostPreviewArea({
+  posts,
+  isAdmin = false,
+}: {
+  posts: IPost[];
+  isAdmin: boolean;
+}) {
   return (
     <div className="flex flex-col gap-4 md:gap-10">
       {posts.map((post, idx) => (
-        <PostPreviewCard key={idx} post={post} />
+        <PostPreviewCard key={idx} post={post} isAdmin={isAdmin} />
       ))}
     </div>
   );

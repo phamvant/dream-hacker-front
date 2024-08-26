@@ -1,5 +1,5 @@
 import configuration from "@/app/config/configuration";
-import PostPreviewArea from "@/components/PostPreviewArea";
+import PostPreviewArea, { IPost } from "@/components/PostPreviewArea";
 import { notFound, redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import {
@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { SlashIcon } from "lucide-react";
 import Link from "next/link";
+import { getServerSession } from "@/lib/auth/auth";
 
 function BreadcrumbWithDropdown({
   className,
@@ -195,12 +196,20 @@ export default async function List({
     notFound();
   }
 
+  const session = await getServerSession(cookies());
+
   let categoryInfo: any = {};
 
-  let posts: any[] = [];
+  let posts: IPost[] = [];
   try {
     const ret = await fetch(
-      `${configuration.APP.BACKEND_URL}/api/v1/category?id=${searchParams.category}&page=${searchParams.page}`,
+      `${configuration.APP.BACKEND_URL}${
+        session
+          ? session.role === "ADMIN"
+            ? "/admin/"
+            : "/api/v1/"
+          : "/api/v1/"
+      }category?id=${searchParams.category}&page=${searchParams.page}`,
       {
         cache: "no-cache",
         headers: { Cookie: cookies().toString() },
@@ -250,7 +259,10 @@ export default async function List({
               </div>
             }
           >
-            <PostPreviewArea posts={posts} />
+            <PostPreviewArea
+              posts={posts}
+              isAdmin={session && session.role === "ADMIN"}
+            />
           </Suspense>
 
           <ListPagePaging
