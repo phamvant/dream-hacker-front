@@ -81,5 +81,33 @@ export const menuItems: MenuItem[] = [
       },
     ],
   },
+
+  {
+    name: "Phd",
+    href: "/list?category=34&page=1",
+    sub: [
+      // {
+      //   name: "School Introduction",
+      //   id: 20,
+      // },
+      // {
+      //   name: "Major and Ranking",
+      //   id: 21,
+      // },
+      // {
+      //   name: "Application FAQ",
+      //   id: 22,
+      // },
+      {
+        name: "Application Summary",
+        id: 34,
+      },
+      {
+        name: "PhD Interview",
+        id: 36,
+      },
+    ],
+  },
+
   { name: "Editor", href: "/editor/new", role: "ADMIN" },
 ];
