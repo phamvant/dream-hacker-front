@@ -1,13 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  BookMarked,
-  CheckIcon,
-  MessagesSquare,
-  SmileIcon,
-  ThumbsUp,
-} from "lucide-react";
+import { BookMarked, CheckIcon, MessagesSquare, ThumbsUp } from "lucide-react";
 import configuration from "@/app/config/configuration";
 import { useState } from "react";
 
@@ -40,6 +34,8 @@ function PostPreviewCard({ post, isAdmin }: { post: IPost; isAdmin: boolean }) {
       );
 
       if (ret.ok) {
+        post.likes = isLiked ? post.likes - 1 : post.likes + 1;
+        post.is_liked = !isLiked;
         setLiked((prev) => !prev);
         setLikes((prev) => {
           if (!isLiked) {
